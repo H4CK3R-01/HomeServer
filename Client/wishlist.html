@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wunschliste - Raspberry Pi</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/wishlist.css">
+</head>
+<body>
+<header>
+    <!--<nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="nav navbar-nav navbar-right ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/wunschliste">Wunschliste</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/gekauft">Gekauft</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/access_point">Access Point</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http:\/\/192.168.178.23/"
+                                            target="_blank">OctoPrint</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http:\/\/192.168.178.55:9981" target="_blank">TV</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="http:\/\/192.168.178.55:8123" target="_blank">Home
+                        Assistant</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http:\/\/192.168.178.55:9000" target="_blank">Portainer</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/phpmyadmin" target="_blank">PHPMyAdmin</a></li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" data-toggle="dropdown">Hallo
+                            Florian </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/files">Dateien</a>
+                            <a class="dropdown-item" href="/admin">Admin</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/settings">Einstellungen</a>
+                            <a class="dropdown-item" href="/logout">Abmelden</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>-->
+</header>
+
+<main>
+    <div class="container">
+        <div class="modal fade" id="add_list" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add new list</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="new_list">New list name:</label>
+                        <input class="form-control form-control-sm" type="text" name="new_list" id="new_list" placeholder="New list name">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="add_list_save">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h1>Wunschliste</h1>
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#show">Anzeigen</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#edit">Bearbeiten</a></li>
+            <li class="ml-auto">
+                <form method="GET" action="">
+                    <label for="list">Liste auswählen:</label>
+                    <select name="list" id="list"></select>
+                </form>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" id="show" class="tab-pane active">
+                <div class="table-responsive">
+                    <table class="table table-striped borderless" id="table">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" id="check_all"></th>
+                            <th></th>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Anzahl</th>
+                            <th>Preis einzeln</th>
+                            <th>Preis gesamt</th>
+                        </tr>
+                        </thead>
+                        <tbody id="wish">
+
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Gesamtpreis (alle ausgewählte Zeilen)</td>
+                            <td></td>
+                            <td id="preis_gesamt_eins"></td>
+                            <td id="preis_gesamt_anzahl"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div role="tabpanel" id="edit" class="tab-pane">
+                <div class="card">
+                    <div class="card-header">Produkt hinzufügen</div>
+                    <div class="card-body">
+                        <div class="form-group" id="add_form">
+                            <label for="beschreibung">Beschreibung:</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="Beschreibung"
+                                   name="beschreibung" id="beschreibung" autocomplete="off">
+                            <label for="link">Link:</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="Link" name="link"
+                                   id="link" autocomplete="off">
+                            <label for="bild">Bild:</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="Bild" name="bild"
+                                   id="bild" autocomplete="off">
+                            <label for="anzahl">Anzahl:</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="Anzahl" name="anzahl"
+                                   id="anzahl" autocomplete="off">
+                            <label for="preis">Preis:</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="Preis" name="preis"
+                                   id="preis" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" id="save">Speichern</button>
+                        <button type="reset" class="btn btn-secondary" id="reset">Zurücksetzen</button>
+                    </div>
+                </div>
+
+                <ul id="wish_edit">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer container"></footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script src="js/tools.js"></script>
+<script src="js/wishlist.js"></script>
+</body>
+</html>
