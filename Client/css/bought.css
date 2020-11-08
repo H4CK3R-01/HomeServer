@@ -1,0 +1,21 @@
+#bought .img-fluid {
+    max-height: 100px;
+}
+
+td {
+    vertical-align: middle;
+}
+
+.tab-pane{
+    padding-top: 10px;
+}
+
+.form-group label {
+    margin-bottom: 0;
+    margin-top: 0.5em;
+}
+
+.form-group label:first-child, .form-group label:last-child {
+    margin-bottom: 0;
+    margin-top: 0;
+}
