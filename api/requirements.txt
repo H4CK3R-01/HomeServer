@@ -1,0 +1,4 @@
+Flask>=1.1.1,<1.2
+flask_cors
+mysql.connector
+gunicorn>=19,<20
