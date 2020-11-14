@@ -1,0 +1,41 @@
+.card {
+    margin-bottom: 15px;
+    min-width: 300px;
+}
+
+.card-header {
+    padding: .75rem 0.75rem;
+    display: flex;
+    justify-content:space-between;
+}
+
+img {
+    height: 1.5em;
+    padding-right: 5px;
+    vertical-align: middle;
+}
+
+.title {
+}
+
+.status {
+    background-color: #404040;
+    height: fit-content;
+    color: white;
+    width: fit-content;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 4px;
+}
+
+.running {
+    background-color: #088900;
+}
+
+.stopped {
+    background-color: #ff0000;
+}
+
+.port {
+    cursor: pointer;
+}

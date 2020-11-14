@@ -2,6 +2,7 @@ import flask
 from flask_cors import CORS
 from wishlist import wish
 from bought import bought
+from status import status
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -14,5 +15,6 @@ def home():
 
 app.register_blueprint(wish)
 app.register_blueprint(bought)
+app.register_blueprint(status)
 
 app.run()

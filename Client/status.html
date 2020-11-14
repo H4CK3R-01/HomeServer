@@ -1,0 +1,208 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Status - Raspberry Pi</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/status.css">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="nav navbar-nav navbar-right ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="wishlist.html">Wunschliste</a></li>
+                    <li class="nav-item"><a class="nav-link" href="bought.html">Gekauft</a></li>
+                    <li class="nav-item"><a class="nav-link" href="status.html">Server Status</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http:\/\/192.168.178.23/"
+                                            target="_blank">OctoPrint</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http:\/\/192.168.178.55:9981" target="_blank">TV</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="http:\/\/192.168.178.55:8123" target="_blank">Home
+                        Assistant</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http:\/\/192.168.178.55:9000" target="_blank">Portainer</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/phpmyadmin" target="_blank">PHPMyAdmin</a></li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" data-toggle="dropdown">Hallo
+                            Florian </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/files">Dateien</a>
+                            <a class="dropdown-item" href="/admin">Admin</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/settings">Einstellungen</a>
+                            <a class="dropdown-item" href="/logout">Abmelden</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h1>Service-Status</h1>
+
+        <div class="tab-content">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="card" id="ssh">
+                        <div class="card-header">
+                            <span class="title"><img src="https://upload.wikimedia.org/wikipedia/commons/0/01/Windows_Terminal_Logo_256x256.png?download">ssh</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="#">SSH</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://ubuntu.fritz.box:22', '_blank');">22, </span><span class="port" onclick="window.open('http://ubuntu.fritz.box:33', '_blank');">33</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="octoprint">
+                        <div class="card-header">
+                            <span class="title"><img src="https://octoprint.org/assets/img/tentacle-32x32.png">OctoPrint</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="http://3dprinter.fritz.box" target="_blank">OctoPrint</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://3dprinter.fritz.box:80', '_blank');">80</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="db">
+                        <div class="card-header">
+                            <span class="title"><img src="https://www.phpmyadmin.net/static/favicon.ico">Datenbank</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="http://ubuntu.fritz.box:9002" target="_blank">phpMyAdmin</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://ubuntu.fritz.box:3306', '_blank');">3306, </span><span class="port" onclick="window.open('http://ubuntu.fritz.box:9002', '_blank');">9002</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="mqtt">
+                        <div class="card-header">
+                            <span class="title"><img src="https://mqtt.org/favicon-32x32.png">mqtt(ioBroker)</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="#">MQTT</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://ubuntu.fritz.box:1883', '_blank');">1883</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="portainer">
+                        <div class="card-header">
+                            <span class="title"><img src="https://mk0portainer4y460ly6.kinstacdn.com/wp-content/uploads/2018/07/cropped-favicon.png">portainer</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="http://ubuntu.fritz.box:9000" target="_blank">Portainer</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://ubuntu.fritz.box:8000', '_blank');">8000, </span><span class="port" onclick="window.open('http://ubuntu.fritz.box:9000', '_blank');">9000</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="pihole">
+                        <div class="card-header">
+                            <span class="title"><img src="https://pi-hole.net/wp-content/uploads/2016/12/cropped-Vortex-R-1-192x192.png">pihole</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="http://ubuntu.fritz.box:9001/admin/" target="_blank">Pi-Hole</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://ubuntu.fritz.box:9001', '_blank');">9001, </span><span class="port" onclick="window.open('http://ubuntu.fritz.box:443', '_blank');">443, </span><span class="port" onclick="window.open('http://ubuntu.fritz.box:53', '_blank');">53</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="iobroker">
+                        <div class="card-header">
+                            <span class="title"><img src="https://www.iobroker.net/favicon.ico">iobroker</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="http://ubuntu.fritz.box:9003" target="_blank">ioBroker Admin-Panel</a><br>
+                            <a href="http://ubuntu.fritz.box:9004" target="_blank">ioBroker Visualisierung</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://ubuntu.fritz.box:9003', '_blank');">9003, </span><span class="port" onclick="window.open('http://ubuntu.fritz.box:9004', '_blank');">9004, </span><span class="port" onclick="window.open('http://ubuntu.fritz.box:1883', '_blank');">1883</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="tvheadend">
+                        <div class="card-header">
+                            <span class="title"><img src="https://raw.githubusercontent.com/tvheadend/tvheadend/master/src/webui/static/img/logo.png">tvheadend</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="http://ubuntu.fritz.box:9981" target="_blank">TVheadend</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://ubuntu.fritz.box:9981', '_blank');">9981, </span><span class="port" onclick="window.open('http://ubuntu.fritz.box:9982', '_blank');">9982</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="raspap">
+                        <div class="card-header">
+                            <span class="title"><img src="https://github.com/billz/raspap-webgui/raw/master/app/img/raspAP-logo.png">RaspAP</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="http://ubuntu.fritz.box:????" target="_blank">RaspAP</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://ubuntu.fritz.box:????', '_blank');">????</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="website">
+                        <div class="card-header">
+                            <span class="title">webseite</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="http://ubuntu.fritz.box" target="_blank">Webseite</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://ubuntu.fritz.box:80', '_blank');">80</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="api">
+                        <div class="card-header">
+                            <span class="title">api</span>
+                            <span class="status">loading</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="http://ubuntu.fritz.box:????" target="_blank">API</a><br>
+                            <span class="ports">Ports: <span class="port" onclick="window.open('http://ubuntu.fritz.box:????', '_blank');">????</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer container"></footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<script src="js/tools.js"></script>
+<script src="js/status.js"></script>
+</body>
+</html>
