@@ -1,5 +1,5 @@
 $(function () {
-    httpGetAsync('http://127.0.0.1:5000/api/v1/resources/device', "", showDevices);
+    httpGetAsync('http://ubuntu.fritz.box:9005ubuntu.fritz.box:9005ubuntu.fritz.box:9005ubuntu.fritz.box:9005/api/v1/resources/device', "", showDevices);
 
     // Tabs
     let url = document.location.toString();
@@ -21,7 +21,7 @@ $(document).on('click', '#save', function() {
     data['datenblatt'] = $("#datenblatt").val();
     data['library'] = $("#library").val();
 
-    httpPostAsync("http://127.0.0.1:5000/api/v1/resources/device", data, add_result);
+    httpPostAsync("http://ubuntu.fritz.box:9005ubuntu.fritz.box:9005ubuntu.fritz.box:9005ubuntu.fritz.box:9005/api/v1/resources/device", data, add_result);
 });
 
 $(document).on('click', '#reset', function() {
@@ -38,7 +38,7 @@ $(document).on('click', '.save', function () {
     data['bild'] = $("#bild_" + id).val();
     data['datenblatt'] = $("#datenblatt_" + id).val();
     data['library'] = $("#library_" + id).val();
-    httpPutAsync("http://127.0.0.1:5000/api/v1/resources/device/" + id, data, update_result);
+    httpPutAsync("http://ubuntu.fritz.box:9005/api/v1/resources/device/" + id, data, update_result);
 });
 
 // Reset input
@@ -52,7 +52,7 @@ $(document).on('click', '.reset', function () {
 // Delete device
 $(document).on('click', '.delete', function () {
     let id = this.id.substring(7);
-    httpDeleteAsync("http://127.0.0.1:5000/api/v1/resources/device/" + id, "", delete_result);
+    httpDeleteAsync("http://ubuntu.fritz.box:9005/api/v1/resources/device/" + id, "", delete_result);
 });
 
 function showDevices(data) {

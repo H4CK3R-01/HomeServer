@@ -48,7 +48,7 @@ def tvheadend():
 
 @status.route('/api/v1/resources/status/raspap', methods=['GET'])
 def raspap():
-    return check_port('ubuntu.fritz.box', 80)
+    return check_port('ubuntu.fritz.box', 1000)  # TODO
 
 
 @status.route('/api/v1/resources/status/website', methods=['GET'])
@@ -58,7 +58,7 @@ def website():
 
 @status.route('/api/v1/resources/status/api', methods=['GET'])
 def api():
-    return check_port('ubuntu.fritz.box', 80)
+    return check_port('ubuntu.fritz.box', 9005)
 
 
 @status.route('/api/v1/resources/status/all', methods=['GET'])

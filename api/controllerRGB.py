@@ -28,7 +28,7 @@ def set_color():
         g = int(value["color"][3:5], 16)
         b = int(value["color"][5:7], 16)
         mydb = mysql.connector.connect(
-            host="192.168.178.55",
+            host="ubuntu.fritz.box",
             user="root",
             passwd="Admin!123",
             database="mydb"
@@ -53,7 +53,7 @@ def set_color():
 
 def execute_sql(sql):
     mydb = mysql.connector.connect(
-        host="192.168.178.55",
+        host="ubuntu.fritz.box",
         user="root",
         passwd="Admin!123",
         database="mydb"
@@ -65,7 +65,7 @@ def execute_sql(sql):
 
 def prepare_sql(sql, params):
     mydb = mysql.connector.connect(
-        host="192.168.178.55",
+        host="ubuntu.fritz.box",
         user="root",
         passwd="Admin!123",
         database="mydb"
