@@ -35,7 +35,21 @@ function httpDeleteAsync(url, data, callback) {
 
     xmlHttp.open("DELETE", url, true); // true for asynchronous
     xmlHttp.setRequestHeader("Authorization", "Basic " + btoa("florian" + ":" + "1234"));
-    xmlHttp.send(null);
+    xmlHttp.send();
+}
+
+function httpPutAsync(url, data, callback) {
+    const xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function () {
+        if(this.readyState === 4) {
+            callback(xmlHttp.responseText);
+        }
+    }
+
+    xmlHttp.open("PUT", url, true); // true for asynchronous
+    xmlHttp.setRequestHeader("Authorization", "Basic " + btoa("florian" + ":" + "1234"));
+    xmlHttp.setRequestHeader('Content-Type', 'application/json');
+    xmlHttp.send(JSON.stringify(data));
 }
 
 

@@ -4,6 +4,7 @@ from wishlist import wish
 from bought import bought
 from status import status
 from controllerRGB import rgb
+from device_overview import dev
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -18,5 +19,6 @@ app.register_blueprint(wish)
 app.register_blueprint(bought)
 app.register_blueprint(status)
 app.register_blueprint(rgb)
+app.register_blueprint(dev)
 
 app.run()
