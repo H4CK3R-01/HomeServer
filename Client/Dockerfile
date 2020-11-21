@@ -1,2 +1,3 @@
 FROM nginx
-COPY . /usr/share/nginx/html
+MAINTAINER Florian Kaiser <resiaknairolf@gmail.com>
+COPY . /usr/share/nginx/html/
