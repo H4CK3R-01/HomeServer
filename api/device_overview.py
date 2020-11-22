@@ -1,6 +1,7 @@
 from flask import request, jsonify, Blueprint
-from tools import execute_sql, prepare_sql
+
 from auth import basicAuth
+from tools import execute_sql, prepare_sql
 
 dev = Blueprint('dev', __name__)
 

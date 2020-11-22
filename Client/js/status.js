@@ -6,8 +6,8 @@ $(function () {
 function updateStatus(data) {
     data = JSON.parse(data);
     $.each(data['data'], (key) => {
-        if($("#" + key).length !== 0) {
-            if(data['data'][key]['open']) {
+        if ($("#" + key).length !== 0) {
+            if (data['data'][key]['open']) {
                 $("#" + key + " > .card-header > .status").removeClass().addClass("status running").text("RUNNING");
             } else {
                 $("#" + key + " > .card-header > .status").removeClass().addClass("status stopped").text("STOPPED");

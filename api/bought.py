@@ -1,5 +1,7 @@
 import datetime
+
 from flask import request, jsonify, Blueprint
+
 from auth import basicAuth
 from tools import execute_sql, prepare_sql
 

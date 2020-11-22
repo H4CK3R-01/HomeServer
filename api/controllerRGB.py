@@ -1,8 +1,9 @@
 import json
-import mysql.connector
 
+import mysql.connector
 import requests
 from flask import jsonify, Blueprint, request
+
 from auth import basicAuth
 
 rgb = Blueprint('rgb', __name__)
@@ -36,7 +37,7 @@ def set_color():
             database="mydb"
         )
         cursor = mydb.cursor(prepared=True)
-        if prepare_sql("SELECT COUNT(1) FROM farben_luefter WHERE led_id = %s", (key, ))[0][0] == 1:
+        if prepare_sql("SELECT COUNT(1) FROM farben_luefter WHERE led_id = %s", (key,))[0][0] == 1:
             cursor.execute("UPDATE farben_luefter SET r = %s, g = %s, b = %s WHERE led_id = %s", (r, g, b, key))
         else:
             cursor.execute("INSERT INTO farben_luefter (r, g, b, led_id) VALUES (%s, %s, %s, %s)", (r, g, b, key))

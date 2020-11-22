@@ -10,7 +10,7 @@ $(function () {
 });
 
 // Tabs
-$(document).on('shown.bs.tab', '.nav-tabs a', function(e) {
+$(document).on('shown.bs.tab', '.nav-tabs a', function (e) {
     window.location.hash = e.target.hash;
 })
 
@@ -32,18 +32,18 @@ $(document).on('change', '#list', function () {
 });
 
 // Check all button
-$(document).on('click', '#check_all', function() {
+$(document).on('click', '#check_all', function () {
     $("#wish").children("tr").each(function () {
         this.firstChild.firstChild.checked = $("#check_all").prop("checked");
     })
     calc();
 });
 
-$(document).on('click', 'input[type="checkbox"]', function() {
+$(document).on('click', 'input[type="checkbox"]', function () {
     calc();
 });
 
-$(document).on('click', '#save', function() {
+$(document).on('click', '#save', function () {
     const data = {};
     data['beschreibung'] = $("#beschreibung").val();
     data['link'] = $("#link").val();
@@ -54,7 +54,7 @@ $(document).on('click', '#save', function() {
     httpPostAsync("http://localhost:5000/api/v1/resources/wish/" + $('#list').val(), data, add_result);
 });
 
-$(document).on('click', '#reset', function() {
+$(document).on('click', '#reset', function () {
     $("#add_form").children("input").each(function () {
         $(this).val("");
     });
@@ -89,7 +89,7 @@ $(document).on('click', '.delete', function () {
 
 // Add new list
 $(document).on('change', 'select', function () {
-    if($(this).val() === "new") {
+    if ($(this).val() === "new") {
         $('#add_list').modal('show')
     }
 });
@@ -112,7 +112,7 @@ function calc() {
         let preis = $(this).find("input").val();
         let anzahl = $(this).find("td")[4].innerText;
 
-        if($(this).find("input").prop("checked")) {
+        if ($(this).find("input").prop("checked")) {
             preis_einzeln = preis_einzeln + preis * 1;
             preis_anzahl = preis_anzahl + anzahl * preis;
         }
@@ -183,53 +183,53 @@ function showWish(data) {
 }
 
 function generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link) {
-    return  "<tr id='row_" + id + "'>" +
-                "<td>" +
-                    "<input type='checkbox' value='" + preis + "'>" +
-                "</td>" +
-                "<td>" + wichtigkeit + "</td>" +
-                "<td>" +
-                    "<img class='img-fluid' alt='product-image' src=" + img + ">" +
-                "</td>" +
-                "<td>" + desc + "<br><a href=" + link + " target='_blank'>" + host + "</a></td>" +
-                "<td>" + anzahl + "</td>" +
-                "<td>" + (preis *  1).toFixed(2) + " €</td>" +
-                "<td>" + (preis * anzahl).toFixed(2) + " €</td>" +
-            "</tr>"
+    return "<tr id='row_" + id + "'>" +
+        "<td>" +
+        "<input type='checkbox' value='" + preis + "'>" +
+        "</td>" +
+        "<td>" + wichtigkeit + "</td>" +
+        "<td>" +
+        "<img class='img-fluid' alt='product-image' src=" + img + ">" +
+        "</td>" +
+        "<td>" + desc + "<br><a href=" + link + " target='_blank'>" + host + "</a></td>" +
+        "<td>" + anzahl + "</td>" +
+        "<td>" + (preis * 1).toFixed(2) + " €</td>" +
+        "<td>" + (preis * anzahl).toFixed(2) + " €</td>" +
+        "</tr>"
 }
 
 function generate_edit_view(id, desc, img, link, anzahl, preis, liste) {
-    return  '<div class="card" id="card_' + id + '">' +
-                '<div class="card-header"><input type="text" class="form-control form-control-sm" placeholder="' + desc + '" name="beschreibung" id="beschreibung_' + id + '" value="' + desc + '" autocomplete="off"></div>' +
-                    '<div class="card-body">' +
-                        '<div class="row">' +
-                            '<div class="col-md-3">' +
-                                '<img class="img-fluid" alt="product-image" src="' + img + '"/>' +
-                            '</div>' +
-                            '<div class="col-md-9">' +
-                                '<div class="form-group">' +
-                                    '<label for="link">Link:</label>' +
-                                    '<input type="text" class="form-control form-control-sm" placeholder="' + link + '" name="link" id="link_' + id + '" value="' + link + '" autocomplete="off">' +
-                                    '<label for="bild">Bild:</label>' +
-                                    '<input type="text" class="form-control form-control-sm" placeholder="' + img + '" name="bild" id="bild_' + id + '" value="' + img + '" autocomplete="off">' +
-                                    '<label for="anzahl">Anzahl:</label>' +
-                                    '<input type="text" class="form-control form-control-sm" placeholder="' + anzahl + '" name="anzahl" id="anzahl_' + id + '" value="' + anzahl + '" autocomplete="off">' +
-                                    '<label for="preis">Preis:</label>' +
-                                    '<input type="text" class="form-control form-control-sm" placeholder="' + preis + '" name="preis" id="preis_' + id + '" value="' + preis + '" autocomplete="off">' +
-                                    '<label for="liste">Liste:</label>' +
-                                    '<input type="hidden" id="liste_before_' + id + '" value="' + liste + '">' +
-                                    '<select class="form-control form-control-sm" name="liste" id="liste_' + id + '"></select>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="card-footer">' +
-                        '<button class="btn btn-primary save" id="save_' + id + '">Speichern</button>' +
-                        '<button class="btn btn-secondary reset" id="reset_' + id + '">Zurücksetzen</button>' +
-                        '<button class="btn btn-danger delete" id="delete_' + id + '">Löschen</button>' +
-                    '</div>' +
-                '</div>' +
-            '</div>'
+    return '<div class="card" id="card_' + id + '">' +
+        '<div class="card-header"><input type="text" class="form-control form-control-sm" placeholder="' + desc + '" name="beschreibung" id="beschreibung_' + id + '" value="' + desc + '" autocomplete="off"></div>' +
+        '<div class="card-body">' +
+        '<div class="row">' +
+        '<div class="col-md-3">' +
+        '<img class="img-fluid" alt="product-image" src="' + img + '"/>' +
+        '</div>' +
+        '<div class="col-md-9">' +
+        '<div class="form-group">' +
+        '<label for="link">Link:</label>' +
+        '<input type="text" class="form-control form-control-sm" placeholder="' + link + '" name="link" id="link_' + id + '" value="' + link + '" autocomplete="off">' +
+        '<label for="bild">Bild:</label>' +
+        '<input type="text" class="form-control form-control-sm" placeholder="' + img + '" name="bild" id="bild_' + id + '" value="' + img + '" autocomplete="off">' +
+        '<label for="anzahl">Anzahl:</label>' +
+        '<input type="text" class="form-control form-control-sm" placeholder="' + anzahl + '" name="anzahl" id="anzahl_' + id + '" value="' + anzahl + '" autocomplete="off">' +
+        '<label for="preis">Preis:</label>' +
+        '<input type="text" class="form-control form-control-sm" placeholder="' + preis + '" name="preis" id="preis_' + id + '" value="' + preis + '" autocomplete="off">' +
+        '<label for="liste">Liste:</label>' +
+        '<input type="hidden" id="liste_before_' + id + '" value="' + liste + '">' +
+        '<select class="form-control form-control-sm" name="liste" id="liste_' + id + '"></select>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="card-footer">' +
+        '<button class="btn btn-primary save" id="save_' + id + '">Speichern</button>' +
+        '<button class="btn btn-secondary reset" id="reset_' + id + '">Zurücksetzen</button>' +
+        '<button class="btn btn-danger delete" id="delete_' + id + '">Löschen</button>' +
+        '</div>' +
+        '</div>' +
+        '</div>'
 }
 
 function delete_result(data) {

@@ -1,11 +1,12 @@
 import flask
 from flask_cors import CORS
+
 from auth import auth, db
-from wishlist import wish
 from bought import bought
-from status import status
 from controllerRGB import rgb
 from device_overview import dev
+from status import status
+from wishlist import wish
 
 app = flask.Flask(__name__)
 app.config['SECRET_KEY'] = 'yiQHZzmYOFvLJPXxWjIFIkNZKtVcXSDTDM70SGhKnBE526lW38GdbRARsNMeHgqraQ1uUpYL4PBfTAoJ9wCEVUOC'

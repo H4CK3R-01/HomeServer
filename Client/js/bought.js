@@ -10,23 +10,23 @@ $(function () {
 });
 
 // Tabs
-$(document).on('shown.bs.tab', '.nav-tabs a', function(e) {
+$(document).on('shown.bs.tab', '.nav-tabs a', function (e) {
     window.location.hash = e.target.hash;
 })
 
 // Check all button
-$(document).on('click', '#check_all', function() {
+$(document).on('click', '#check_all', function () {
     $("#bought").children("tr").each(function () {
         this.firstChild.firstChild.checked = $("#check_all").prop("checked");
     })
     calc();
 });
 
-$(document).on('click', 'input[type="checkbox"]', function() {
+$(document).on('click', 'input[type="checkbox"]', function () {
     calc();
 });
 
-$(document).on('click', '#save', function() {
+$(document).on('click', '#save', function () {
     const data = {};
     data['beschreibung'] = $("#beschreibung").val();
     data['link'] = $("#link").val();
@@ -37,8 +37,8 @@ $(document).on('click', '#save', function() {
     httpPostAsync("http://localhost:5000/api/v1/resources/bought", data, add_result);
 });
 
-$(document).on('click', '#reset', function() {
-    $("#add_form").children("input").each(function ()  {
+$(document).on('click', '#reset', function () {
+    $("#add_form").children("input").each(function () {
         $(this).val("");
     });
 });
@@ -51,7 +51,7 @@ function calc() {
         let preis = $(this).find("input").val();
         let anzahl = $(this).find("td")[4].innerText;
 
-        if($(this).find("input").prop("checked")) {
+        if ($(this).find("input").prop("checked")) {
             preis_einzeln = preis_einzeln + preis * 1;
             preis_anzahl = preis_anzahl + anzahl * preis;
         }
@@ -91,20 +91,20 @@ function showBought(data) {
 }
 
 function generate_table_row(id, preis, img, desc, host, anzahl, link, jahr) {
-    return  "<tr id='row_" + id + "'>" +
-                "<td>" +
-                    "<input type='checkbox' value='" + preis + "'>" +
-                "</td>" +
-                "<td>" + id + "</td>" +
-                "<td>" +
-                    "<img class='img-fluid' alt='product-image' src=" + img + ">" +
-                "</td>" +
-                "<td>" + desc + "<br><a href=" + link + " target='_blank'>" + host + "</a></td>" +
-                "<td>" + anzahl + "</td>" +
-                "<td>" + (preis *  1).toFixed(2) + " €</td>" +
-                "<td>" + (preis * anzahl).toFixed(2) + " €</td>" +
-                "<td>" + jahr + "</td>" +
-            "</tr>";
+    return "<tr id='row_" + id + "'>" +
+        "<td>" +
+        "<input type='checkbox' value='" + preis + "'>" +
+        "</td>" +
+        "<td>" + id + "</td>" +
+        "<td>" +
+        "<img class='img-fluid' alt='product-image' src=" + img + ">" +
+        "</td>" +
+        "<td>" + desc + "<br><a href=" + link + " target='_blank'>" + host + "</a></td>" +
+        "<td>" + anzahl + "</td>" +
+        "<td>" + (preis * 1).toFixed(2) + " €</td>" +
+        "<td>" + (preis * anzahl).toFixed(2) + " €</td>" +
+        "<td>" + jahr + "</td>" +
+        "</tr>";
 }
 
 function add_result(data) {

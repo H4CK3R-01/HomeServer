@@ -2,19 +2,19 @@
 <html lang="de">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>Status - Raspberry Pi</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/status.css">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+    <link href="css/components.css" rel="stylesheet">
+    <link href="css/status.css" rel="stylesheet">
 </head>
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/"></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <button class="navbar-toggler" data-target="#collapsibleNavbar" data-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
@@ -47,7 +47,8 @@
                         <div class="card-body">
                             <a href="#">SSH</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:22', '_blank');">22</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:22', '_blank');">22</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -64,7 +65,8 @@
                         <div class="card-body">
                             <a href="http://3dprinter.fritz.box" target="_blank">OctoPrint</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://3dprinter.fritz.box:80', '_blank');">80</span>
+                                <span class="port"
+                                      onclick="window.open('http://3dprinter.fritz.box:80', '_blank');">80</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -82,7 +84,8 @@
                         <div class="card-body">
                             <a href="http://ubuntu.fritz.box:9002" target="_blank">phpMyAdmin</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:9002', '_blank');">9002</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:9002', '_blank');">9002</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -100,7 +103,8 @@
                         <div class="card-body">
                             <a href="http://ubuntu.fritz.box:3306" target="_blank">MariaDB</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:3306', '_blank');">3306</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:3306', '_blank');">3306</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -117,7 +121,8 @@
                         <div class="card-body">
                             <a href="#">MQTT</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:1883', '_blank');">1883</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:1883', '_blank');">1883</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -136,7 +141,8 @@
                             <a href="http://ubuntu.fritz.box:9000" target="_blank">Portainer</a><br>
                             <span class="ports">Ports:
                                 <span class="port" onclick="window.open('http://ubuntu.fritz.box:8000', '_blank');">8000, </span>
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:9000', '_blank');">9000</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:9000', '_blank');">9000</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -155,8 +161,10 @@
                             <a href="http://ubuntu.fritz.box:9001/admin/" target="_blank">Pi-Hole</a><br>
                             <span class="ports">Ports:
                                 <span class="port" onclick="window.open('http://ubuntu.fritz.box:9001', '_blank');">9001, </span>
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:443', '_blank');">443, </span>
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:53', '_blank');">53</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:443', '_blank');">443, </span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:53', '_blank');">53</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -175,7 +183,8 @@
                             <a href="http://ubuntu.fritz.box:9004" target="_blank">ioBroker Visualisierung</a><br>
                             <span class="ports">Ports:
                                 <span class="port" onclick="window.open('http://ubuntu.fritz.box:9003', '_blank');">9003, </span>
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:9004', '_blank');">9004</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:9004', '_blank');">9004</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -194,7 +203,8 @@
                             <a href="http://ubuntu.fritz.box:9981" target="_blank">TVheadend</a><br>
                             <span class="ports">Ports:
                                 <span class="port" onclick="window.open('http://ubuntu.fritz.box:9981', '_blank');">9981, </span>
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:9982', '_blank');">9982</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:9982', '_blank');">9982</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -212,7 +222,8 @@
                         <div class="card-body">
                             <a href="http://ubuntu.fritz.box:9006" target="_blank">RaspAP</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:9006', '_blank');">9006</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:9006', '_blank');">9006</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -229,7 +240,8 @@
                         <div class="card-body">
                             <a href="http://ubuntu.fritz.box" target="_blank">GUI</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:80', '_blank');">80</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:80', '_blank');">80</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -246,7 +258,8 @@
                         <div class="card-body">
                             <a href="http://ubuntu.fritz.box:9005" target="_blank">API</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:9005', '_blank');">9005</span>
+                                <span class="port"
+                                      onclick="window.open('http://ubuntu.fritz.box:9005', '_blank');">9005</span>
                             </span>
                         </div>
                         <div class="card-footer">
@@ -262,12 +275,12 @@
 <footer class="footer container"></footer>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+<script crossorigin="anonymous"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
 <script src="js/tools.js"></script>
 <script src="js/status.js"></script>

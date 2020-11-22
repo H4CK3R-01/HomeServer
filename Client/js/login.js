@@ -1,5 +1,5 @@
 $(function () {
-    if(localStorage.getItem('token') !== null) {
+    if (localStorage.getItem('token') !== null) {
         $("#notification_area").append('<div class="alert alert-success" role="alert">You are already logged in!</div>')
     }
 });
@@ -12,7 +12,7 @@ $("#submit").on("click", function () {
 function httpGetAsyncOnlyLogin(url, data, callback) {
     const xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
-        if(this.readyState === 4) {
+        if (this.readyState === 4) {
             callback(xmlHttp.responseText);
         }
     }
@@ -23,7 +23,7 @@ function httpGetAsyncOnlyLogin(url, data, callback) {
 }
 
 function login_callback(data) {
-    if(data === "Unauthorized Access") {
+    if (data === "Unauthorized Access") {
         $("#notification_area").append('<div class="alert alert-danger" role="alert">Login failed. Please check username and password!</div>')
     } else {
         localStorage.setItem('token', JSON.parse(data)['token']);

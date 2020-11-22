@@ -1,7 +1,8 @@
 import json
-from flask import request, jsonify, Blueprint
-from auth import basicAuth
 
+from flask import request, jsonify, Blueprint
+
+from auth import basicAuth
 from tools import execute_sql, prepare_sql
 
 wish = Blueprint('wish', __name__)

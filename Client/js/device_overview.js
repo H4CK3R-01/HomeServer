@@ -9,11 +9,11 @@ $(function () {
 });
 
 // Tabs
-$(document).on('shown.bs.tab', '.nav-tabs a', function(e) {
+$(document).on('shown.bs.tab', '.nav-tabs a', function (e) {
     window.location.hash = e.target.hash;
 })
 
-$(document).on('click', '#save', function() {
+$(document).on('click', '#save', function () {
     const data = {};
     data['bezeichnung'] = $("#bezeichnung").val();
     data['anzahl'] = $("#anzahl").val();
@@ -24,8 +24,8 @@ $(document).on('click', '#save', function() {
     httpPostAsync("http://localhost:5000/api/v1/resources/device", data, add_result);
 });
 
-$(document).on('click', '#reset', function() {
-    $("#add_form").children("input").each(function ()  {
+$(document).on('click', '#reset', function () {
+    $("#add_form").children("input").each(function () {
         $(this).val("");
     });
 });
@@ -44,7 +44,7 @@ $(document).on('click', '.save', function () {
 // Reset input
 $(document).on('click', '.reset', function () {
     let id = this.id.substring(6);
-    $("#card_" + id).find("input").each(function ()  {
+    $("#card_" + id).find("input").each(function () {
         $(this).val($(this).attr('placeholder'));
     });
 });
@@ -92,45 +92,45 @@ function showDevices(data) {
 }
 
 function generate_table_row(id, bezeichnung, anzahl, img, datenblatt, datenblatt_host, library, library_host) {
-    return  "<tr id='row_" + id + "'>" +
-                "<td>" + id + "</td>" +
-                "<td>" +
-                    "<img class='img-fluid' alt='product-image' src=" + img + ">" +
-                "</td>" +
-                "<td>" + bezeichnung + "<br><a href=" + datenblatt + " target='_blank'>" + datenblatt_host + "</a><br><a href=" + library + " target='_blank'>" + library_host + "</a></td>" +
-                "<td>" + anzahl + "</td>" +
-            "</tr>"
+    return "<tr id='row_" + id + "'>" +
+        "<td>" + id + "</td>" +
+        "<td>" +
+        "<img class='img-fluid' alt='product-image' src=" + img + ">" +
+        "</td>" +
+        "<td>" + bezeichnung + "<br><a href=" + datenblatt + " target='_blank'>" + datenblatt_host + "</a><br><a href=" + library + " target='_blank'>" + library_host + "</a></td>" +
+        "<td>" + anzahl + "</td>" +
+        "</tr>"
 }
 
 function generate_edit_view(id, bezeichnung, anzahl, bild, datenblatt, library) {
-    return  '<div class="card" id="card_' + id + '">' +
-                '<div class="card-header"><input type="text" class="form-control form-control-sm" placeholder="' + bezeichnung + '" name="bezeichnung" id="bezeichnung_' + id + '" value="' + bezeichnung + '" autocomplete="off"></div>' +
-                    '<div class="card-body">' +
-                        '<div class="row">' +
-                            '<div class="col-md-3">' +
-                                '<img class="img-fluid" alt="product-image" src="' + bild + '"/>' +
-                            '</div>' +
-                            '<div class="col-md-9">' +
-                                '<div class="form-group">' +
-                                    '<label for="anzahl">Anzahl:</label>' +
-                                    '<input type="text" class="form-control form-control-sm" placeholder="' + anzahl + '" name="anzahl" id="anzahl_' + id + '" value="' + anzahl + '" autocomplete="off">' +
-                                    '<label for="bild">Bild:</label>' +
-                                    '<input type="text" class="form-control form-control-sm" placeholder="' + bild + '" name="bild" id="bild_' + id + '" value="' + bild + '" autocomplete="off">' +
-                                    '<label for="datenblatt">Datenblatt:</label>' +
-                                    '<input type="text" class="form-control form-control-sm" placeholder="' + datenblatt + '" name="datenblatt" id="datenblatt_' + id + '" value="' + datenblatt + '" autocomplete="off">' +
-                                    '<label for="library">Library:</label>' +
-                                    '<input type="text" class="form-control form-control-sm" placeholder="' + library + '" name="library" id="library_' + id + '" value="' + library + '" autocomplete="off">' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="card-footer">' +
-                        '<button class="btn btn-primary save" id="save_' + id + '">Speichern</button>' +
-                        '<button class="btn btn-secondary reset" id="reset_' + id + '">Zurücksetzen</button>' +
-                        '<button class="btn btn-danger delete" id="delete_' + id + '">Löschen</button>' +
-                    '</div>' +
-                '</div>' +
-            '</div>'
+    return '<div class="card" id="card_' + id + '">' +
+        '<div class="card-header"><input type="text" class="form-control form-control-sm" placeholder="' + bezeichnung + '" name="bezeichnung" id="bezeichnung_' + id + '" value="' + bezeichnung + '" autocomplete="off"></div>' +
+        '<div class="card-body">' +
+        '<div class="row">' +
+        '<div class="col-md-3">' +
+        '<img class="img-fluid" alt="product-image" src="' + bild + '"/>' +
+        '</div>' +
+        '<div class="col-md-9">' +
+        '<div class="form-group">' +
+        '<label for="anzahl">Anzahl:</label>' +
+        '<input type="text" class="form-control form-control-sm" placeholder="' + anzahl + '" name="anzahl" id="anzahl_' + id + '" value="' + anzahl + '" autocomplete="off">' +
+        '<label for="bild">Bild:</label>' +
+        '<input type="text" class="form-control form-control-sm" placeholder="' + bild + '" name="bild" id="bild_' + id + '" value="' + bild + '" autocomplete="off">' +
+        '<label for="datenblatt">Datenblatt:</label>' +
+        '<input type="text" class="form-control form-control-sm" placeholder="' + datenblatt + '" name="datenblatt" id="datenblatt_' + id + '" value="' + datenblatt + '" autocomplete="off">' +
+        '<label for="library">Library:</label>' +
+        '<input type="text" class="form-control form-control-sm" placeholder="' + library + '" name="library" id="library_' + id + '" value="' + library + '" autocomplete="off">' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="card-footer">' +
+        '<button class="btn btn-primary save" id="save_' + id + '">Speichern</button>' +
+        '<button class="btn btn-secondary reset" id="reset_' + id + '">Zurücksetzen</button>' +
+        '<button class="btn btn-danger delete" id="delete_' + id + '">Löschen</button>' +
+        '</div>' +
+        '</div>' +
+        '</div>'
 }
 
 function delete_result(data) {
@@ -159,11 +159,11 @@ function update_result(data) {
         if (data['status'] === 200) {
             $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich geändert!</div>');
             let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-            if($("#liste_before_" + id).val() !== $("#liste_" + id).val()) {
+            if ($("#liste_before_" + id).val() !== $("#liste_" + id).val()) {
                 $("#card_" + id).remove();
                 $("#row_" + id).remove();
             } else {
-                $("#card_" + id).find("input").each(function ()  {
+                $("#card_" + id).find("input").each(function () {
                     $(this).attr('placeholder', $(this).val());
                 });
 

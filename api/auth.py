@@ -1,9 +1,9 @@
-from flask import abort, request, g, url_for, Flask, current_app, Blueprint
-from flask_sqlalchemy import SQLAlchemy
-from flask_httpauth import HTTPBasicAuth
-from passlib.apps import custom_app_context as pwd_context
-from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
+from flask import abort, request, g, url_for, current_app, Blueprint
 from flask import jsonify
+from flask_httpauth import HTTPBasicAuth
+from flask_sqlalchemy import SQLAlchemy
+from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
+from passlib.apps import custom_app_context as pwd_context
 
 auth = Blueprint("auth", __name__)
 
@@ -33,9 +33,9 @@ class User(db.Model):
         try:
             data = s.loads(token)
         except SignatureExpired:
-            return None    # valid token, but expired
+            return None  # valid token, but expired
         except BadSignature:
-            return None    # invalid token
+            return None  # invalid token
         user = User.query.get(data['id'])
         return user
 
@@ -58,9 +58,9 @@ def new_user():
     username = request.json.get('username')
     password = request.json.get('password')
     if username is None or password is None:
-        abort(400)    # missing arguments
+        abort(400)  # missing arguments
     if User.query.filter_by(username=username).first() is not None:
-        abort(400)    # existing user
+        abort(400)  # existing user
     user = User(username=username)
     user.hash_password(password)
     db.session.add(user)
