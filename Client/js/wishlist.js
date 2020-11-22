@@ -1,6 +1,6 @@
 // Get lists
 $(function () {
-    httpGetAsync('http://ubuntu.fritz.box:9005/api/v1/resources/wish/lists', "", loadLists);
+    httpGetAsync('http://localhost:5000/api/v1/resources/wish/lists', "", loadLists);
 
     // Tabs
     let url = document.location.toString();
@@ -27,7 +27,7 @@ $(document).on('change', '#list', function () {
     $('#preis_gesamt_anzahl').text("");
     $('#preis_gesamt_eins').text("");
 
-    httpGetAsync('http://ubuntu.fritz.box:9005/api/v1/resources/wish/list/' + this.value, "", showWish);
+    httpGetAsync('http://localhost:5000/api/v1/resources/wish/list/' + this.value, "", showWish);
     setGetParameter("list", this.value);
 });
 
@@ -51,11 +51,11 @@ $(document).on('click', '#save', function() {
     data['anzahl'] = $("#anzahl").val();
     data['preis'] = $("#preis").val();
 
-    httpPostAsync("http://ubuntu.fritz.box:9005/api/v1/resources/wish/" + $('#list').val(), data, add_result);
+    httpPostAsync("http://localhost:5000/api/v1/resources/wish/" + $('#list').val(), data, add_result);
 });
 
 $(document).on('click', '#reset', function() {
-    $("#add_form").children("input").each(function ()  {
+    $("#add_form").children("input").each(function () {
         $(this).val("");
     });
 });
@@ -69,13 +69,13 @@ $(document).on('click', '.save', function () {
     data['anzahl'] = $("#anzahl_" + id).val();
     data['preis'] = $("#preis_" + id).val();
     data['liste'] = $("#liste_" + id).val();
-    httpPostAsync("http://ubuntu.fritz.box:9005/api/v1/resources/wish/update/" + id, data, update_result);
+    httpPostAsync("http://localhost:5000/api/v1/resources/wish/update/" + id, data, update_result);
 });
 
 // Reset input
 $(document).on('click', '.reset', function () {
     let id = this.id.substring(6);
-    $("#card_" + id).find("input").each(function ()  {
+    $("#card_" + id).find("input").each(function () {
         $(this).val($(this).attr('placeholder'));
     });
 });
@@ -83,7 +83,7 @@ $(document).on('click', '.reset', function () {
 // Delete wish
 $(document).on('click', '.delete', function () {
     let id = this.id.substring(7);
-    httpPostAsync("http://ubuntu.fritz.box:9005/api/v1/resources/wish/delete/" + id, "", delete_result);
+    httpPostAsync("http://localhost:5000/api/v1/resources/wish/delete/" + id, "", delete_result);
 });
 
 
@@ -123,22 +123,25 @@ function calc() {
 
 
 function loadLists(data) {
-    const lists = JSON.parse(data);
+    if (isJson(data)) {
+        const lists = JSON.parse(data);
+        const $select = $('#list');
+        $.each(lists['data'], function (key) {
+            $select.append('<option value="' + key + '">' + lists['data'][key] + '</option>');
+        });
 
-    const $select = $('#list');
-    $.each(lists['data'], function (key) {
-        $select.append('<option value="' + key +  '">' + lists['data'][key] + '</option>');
-    });
+        let get = findGetParameter("list");
+        if (get == null) {
+            $select.val("wunschliste");
+        } else {
+            if (selectHasValue("list", get)) $select.val(get);
+            else $select.val("wunschliste");
+        }
 
-    let get = findGetParameter("list");
-    if(get == null) {
-        $select.val("wunschliste");
+        httpGetAsync('http://localhost:5000/api/v1/resources/wish/list/' + $select.val(), "", showWish);
     } else {
-        if(selectHasValue("list", get)) $select.val(get);
-        else $select.val("wunschliste");
+        $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich!</div>');
     }
-
-    httpGetAsync('http://ubuntu.fritz.box:9005/api/v1/resources/wish/list/' + $select.val(), "", showWish);
 }
 
 
@@ -146,33 +149,37 @@ function showWish(data) {
     $("#wish").empty();
     $("#wish_edit").empty();
 
-    data = JSON.parse(data);
-    $.each(data['data'], (key) => {
-        let wish = data['data'][key];
-        let id = wish[0];
-        let desc = wish[1];
-        let link = wish[2];
-        let host;
-        try {
-            host = new URL(link).host;
-        } catch (TypeError) {
-            host = "";
-        }
-        let anzahl = wish[4];
-        let img = wish[5];
-        let preis = wish[6];
-        let wichtigkeit = wish[7];
-        let liste = wish[8];
+    if (isJson(data)) {
+        data = JSON.parse(data);
+        $.each(data['data'], (key) => {
+            let wish = data['data'][key];
+            let id = wish[0];
+            let desc = wish[1];
+            let link = wish[2];
+            let host;
+            try {
+                host = new URL(link).host;
+            } catch (TypeError) {
+                host = "";
+            }
+            let anzahl = wish[4];
+            let img = wish[5];
+            let preis = wish[6];
+            let wichtigkeit = wish[7];
+            let liste = wish[8];
 
-        $("#wish").append(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link));
-        $("#wish_edit").append(generate_edit_view(id, desc, img, link, anzahl, preis, liste))
+            $("#wish").append(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link));
+            $("#wish_edit").append(generate_edit_view(id, desc, img, link, anzahl, preis, liste))
 
-        $('#list > option').each(function () {
-            $("#liste_" + id).append('<option value="' + this.value +  '">' + this.text + '</option>');
+            $('#list > option').each(function () {
+                $("#liste_" + id).append('<option value="' + this.value + '">' + this.text + '</option>');
+            });
+            $("#liste_" + id).append('<option value="new" class="new">Add new list</option>');
+            $("#liste_" + id).val(liste);
         });
-        $("#liste_" + id).append('<option value="new" class="new">Add new list</option>');
-        $("#liste_" + id).val(liste);
-    });
+    } else {
+        $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich!</div>');
+    }
 }
 
 function generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link) {
@@ -225,77 +232,105 @@ function generate_edit_view(id, desc, img, link, anzahl, preis, liste) {
             '</div>'
 }
 
-function delete_result(message) {
-    let data = JSON.parse(message)
-    if(data['status'] === 200) {
-        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-        $("#card_" + id).remove();
-        $("#row_" + id).remove();
-    } else {
-        console.error(data);
-    }
-}
-
-function update_result(message) {
-    let data = JSON.parse(message)
-    if(data['status'] === 200) {
-        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-        if($("#liste_before_" + id).val() !== $("#liste_" + id).val()) {
+function delete_result(data) {
+    if (isJson(data)) {
+        data = JSON.parse(data)
+        if (data['status'] === 200) {
+            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich gelöscht!</div>')
+            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
             $("#card_" + id).remove();
             $("#row_" + id).remove();
         } else {
-            $("#card_" + id).find("input").each(function ()  {
-                $(this).attr('placeholder', $(this).val());
-            });
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
+        }
+    } else {
+        if (data === "Unauthorized Access") {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
+        } else {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
+        }
+    }
+}
 
-            let desc = $("#beschreibung_" + id).val();
-            let link = $("#link_" + id).val();
+function update_result(data) {
+    if (isJson(data)) {
+        data = JSON.parse(data)
+        if (data['status'] === 200) {
+            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich geändert!</div>');
+            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+            if ($("#liste_before_" + id).val() !== $("#liste_" + id).val()) {
+                $("#card_" + id).remove();
+                $("#row_" + id).remove();
+            } else {
+                $("#card_" + id).find("input").each(function () {
+                    $(this).attr('placeholder', $(this).val());
+                });
+
+                let desc = $("#beschreibung_" + id).val();
+                let link = $("#link_" + id).val();
+                let host;
+                try {
+                    host = new URL(link).host;
+                } catch (TypeError) {
+                    host = "";
+                }
+                let anzahl = $("#anzahl_" + id).val();
+                let img = $("#bild_" + id).val();
+                let preis = $("#preis_" + id).val();
+                let wichtigkeit = 0
+
+                $("#row_" + id).replaceWith(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link));
+            }
+        } else {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
+        }
+    } else {
+        if (data === "Unauthorized Access") {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
+        } else {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
+        }
+    }
+}
+
+
+function add_result(data) {
+    if (isJson(data)) {
+        data = JSON.parse(data)
+        if (data['status'] === 200) {
+            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich gelöscht!</div>')
+            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+            let desc = $("#beschreibung").val();
+            let link = $("#link").val();
             let host;
             try {
                 host = new URL(link).host;
             } catch (TypeError) {
                 host = "";
             }
-            let anzahl = $("#anzahl_" + id).val();
-            let img = $("#bild_" + id).val();
-            let preis = $("#preis_" + id).val();
+            let anzahl = $("#anzahl").val();
+            let img = $("#bild").val();
+            let preis = $("#preis").val();
             let wichtigkeit = 0
+            let liste = $("#list").val();
 
-            $("#row_" + id).replaceWith(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link));
+            $(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl)).insertBefore('table > tbody > tr:first');
+            $(generate_edit_view(id, desc, img, link, anzahl, preis, liste)).insertBefore('#wish_edit > .card:first');
+            $('#list > option').each(function () {
+                $("#liste_" + id).append('<option value="' + this.value + '">' + this.text + '</option>');
+            });
+            $("#liste_" + id).append('<option value="new" class="new">Add new list</option>');
+            $("#liste_" + id).val(liste);
+
+            $("#reset").trigger("click");
+        } else {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
         }
     } else {
-        console.error(data)
-    }
-}
-
-function add_result(message) {
-    let data = JSON.parse(message)
-    if(data['status'] === 200) {
-        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-        let desc = $("#beschreibung").val();
-        let link = $("#link").val();
-        let host;
-        try {
-            host = new URL(link).host;
-        } catch (TypeError) {
-            host = "";
+        if (data === "Unauthorized Access") {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
+        } else {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
         }
-        let anzahl = $("#anzahl").val();
-        let img = $("#bild").val();
-        let preis = $("#preis").val();
-        let wichtigkeit = 0
-        let liste = $("#list").val();
-
-        $(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl)).insertBefore('table > tbody > tr:first');
-        $(generate_edit_view(id, desc, img, link, anzahl, preis, liste)).insertBefore('#wish_edit > .card:first');
-        $('#list > option').each(function () {
-            $("#liste_" + id).append('<option value="' + this.value +  '">' + this.text + '</option>');
-        });
-        $("#liste_" + id).append('<option value="new" class="new">Add new list</option>');
-        $("#liste_" + id).val(liste);
-
-        $("#reset").trigger("click");
-    } else {
-        console.error(data)
     }
 }

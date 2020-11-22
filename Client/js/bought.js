@@ -1,6 +1,6 @@
 // Get lists
 $(function () {
-    httpGetAsync("http://ubuntu.fritz.box:9005/api/v1/resources/bought/all", "", showBought);
+    httpGetAsync("http://localhost:5000/api/v1/resources/bought/all", "", showBought);
 
     // Tabs
     let url = document.location.toString();
@@ -34,7 +34,7 @@ $(document).on('click', '#save', function() {
     data['anzahl'] = $("#anzahl").val();
     data['preis'] = $("#preis").val();
 
-    httpPostAsync("http://ubuntu.fritz.box:9005/api/v1/resources/bought", data, add_result);
+    httpPostAsync("http://localhost:5000/api/v1/resources/bought", data, add_result);
 });
 
 $(document).on('click', '#reset', function() {
@@ -64,27 +64,30 @@ function calc() {
 function showBought(data) {
     $("#bought").empty();
 
-    data = JSON.parse(data);
-    console.log(data)
+    if (isJson(data)) {
+        data = JSON.parse(data);
 
-    $.each(data['data'], (key) => {
-        let wish = data['data'][key];
-        let id = wish[0];
-        let desc = wish[1];
-        let img = wish[2]
-        let anzahl = wish[3];
-        let preis = wish[4];
-        let link = wish[5];
-        let jahr = wish[6];
-        let host;
-        try {
-            host = new URL(link).host;
-        } catch (TypeError) {
-            host = "";
-        }
+        $.each(data['data'], (key) => {
+            let wish = data['data'][key];
+            let id = wish[0];
+            let desc = wish[1];
+            let img = wish[2]
+            let anzahl = wish[3];
+            let preis = wish[4];
+            let link = wish[5];
+            let jahr = wish[6];
+            let host;
+            try {
+                host = new URL(link).host;
+            } catch (TypeError) {
+                host = "";
+            }
 
-        $("#bought").append(generate_table_row(id, preis, img, desc, host, anzahl, link, jahr));
-    });
+            $("#bought").append(generate_table_row(id, preis, img, desc, host, anzahl, link, jahr));
+        });
+    } else {
+        $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich!</div>');
+    }
 }
 
 function generate_table_row(id, preis, img, desc, host, anzahl, link, jahr) {
@@ -104,26 +107,36 @@ function generate_table_row(id, preis, img, desc, host, anzahl, link, jahr) {
             "</tr>";
 }
 
-function add_result(message) {
-    let data = JSON.parse(message)
-    if(data['status'] === 200) {
-        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-        let desc = $("#beschreibung").val();
-        let link = $("#link").val();
-        let host;
-        try {
-            host = new URL(link).host;
-        } catch (TypeError) {
-            host = "";
-        }
-        let anzahl = $("#anzahl").val();
-        let img = $("#bild").val();
-        let preis = $("#preis").val();
-        let jahr = 2020;
+function add_result(data) {
+    console.log(data)
+    if (isJson(data)) {
+        data = JSON.parse(data)
+        if (data['status'] === 200) {
+            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich hinzugefügt!</div>')
+            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+            let desc = $("#beschreibung").val();
+            let link = $("#link").val();
+            let host;
+            try {
+                host = new URL(link).host;
+            } catch (TypeError) {
+                host = "";
+            }
+            let anzahl = $("#anzahl").val();
+            let img = $("#bild").val();
+            let preis = $("#preis").val();
+            let jahr = 2020;
 
-        $("#bought").append(generate_table_row(id, preis, img, desc, host, anzahl, jahr));
-        $("#reset").trigger("click");
+            $("#bought").append(generate_table_row(id, preis, img, desc, host, anzahl, jahr));
+            $("#reset").trigger("click");
+        } else {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
+        }
     } else {
-        console.error(data)
+        if (data === "Unauthorized Access") {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
+        } else {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
+        }
     }
 }

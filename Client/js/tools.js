@@ -65,6 +65,15 @@ function httpPutAsync(url, data, callback) {
 }
 
 
+function isJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 function findGetParameter(parameterName) {
     let result = null, tmp = [];
     location.search.substr(1).split("&").forEach(function (item) {
