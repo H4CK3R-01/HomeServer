@@ -8,9 +8,9 @@ function updateStatus(data) {
     $.each(data['data'], (key) => {
         if($("#" + key).length !== 0) {
             if(data['data'][key]['data']['open']) {
-                $("#" + key + " > .card-header > .status").removeClass().addClass("status running").text("running")
+                $("#" + key + " > .card-header > .status").removeClass().addClass("status running").text("RUNNING")
             } else {
-                $("#" + key + " > .card-header > .status").removeClass().addClass("status stopped").text("stopped")
+                $("#" + key + " > .card-header > .status").removeClass().addClass("status stopped").text("STOPPED")
             }
         }
     });

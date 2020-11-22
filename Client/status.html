@@ -41,13 +41,12 @@
                         <div class="card-header">
                             <span class="title"><img
                                     src="https://upload.wikimedia.org/wikipedia/commons/0/01/Windows_Terminal_Logo_256x256.png?download">ssh</span>
-                            <span class="status">loading</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
                             <a href="#">SSH</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:22', '_blank');">22, </span>
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:33', '_blank');">33</span>
+                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:22', '_blank');">22</span>
                             </span>
                         </div>
                     </div>
@@ -56,7 +55,7 @@
                     <div class="card" id="octoprint">
                         <div class="card-header">
                             <span class="title"><img src="https://octoprint.org/assets/img/tentacle-32x32.png">OctoPrint</span>
-                            <span class="status">loading</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
                             <a href="http://3dprinter.fritz.box" target="_blank">OctoPrint</a><br>
@@ -67,17 +66,31 @@
                     </div>
                 </div>
                 <div class="col-sm">
-                    <div class="card" id="db">
+                    <div class="card" id="phpmyadmin">
                         <div class="card-header">
                             <span class="title"><img
-                                    src="https://www.phpmyadmin.net/static/favicon.ico">Datenbank</span>
-                            <span class="status">loading</span>
+                                    src="https://www.phpmyadmin.net/static/favicon.ico">phpMyAdmin</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
                             <a href="http://ubuntu.fritz.box:9002" target="_blank">phpMyAdmin</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:3306', '_blank');">3306, </span>
                                 <span class="port" onclick="window.open('http://ubuntu.fritz.box:9002', '_blank');">9002</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="card" id="db">
+                        <div class="card-header">
+                            <span class="title"><img
+                                    src="https://mariadb.com/wp-content/themes/mariadb/assets/images/favicon/apple-touch-icon.png">MariaDB</span>
+                            <span class="status">LOADING</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="http://ubuntu.fritz.box:3306" target="_blank">MariaDB</a><br>
+                            <span class="ports">Ports:
+                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:3306', '_blank');">3306</span>
                             </span>
                         </div>
                     </div>
@@ -85,8 +98,8 @@
                 <div class="col-sm">
                     <div class="card" id="mqtt">
                         <div class="card-header">
-                            <span class="title"><img src="https://mqtt.org/favicon-32x32.png">mqtt(ioBroker)</span>
-                            <span class="status">loading</span>
+                            <span class="title"><img src="https://mqtt.org/favicon-32x32.png">mqtt</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
                             <a href="#">MQTT</a><br>
@@ -101,7 +114,7 @@
                         <div class="card-header">
                             <span class="title"><img
                                     src="https://mk0portainer4y460ly6.kinstacdn.com/wp-content/uploads/2018/07/cropped-favicon.png">portainer</span>
-                            <span class="status">loading</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
                             <a href="http://ubuntu.fritz.box:9000" target="_blank">Portainer</a><br>
@@ -117,7 +130,7 @@
                         <div class="card-header">
                             <span class="title"><img
                                     src="https://pi-hole.net/wp-content/uploads/2016/12/cropped-Vortex-R-1-192x192.png">pihole</span>
-                            <span class="status">loading</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
                             <a href="http://ubuntu.fritz.box:9001/admin/" target="_blank">Pi-Hole</a><br>
@@ -133,15 +146,14 @@
                     <div class="card" id="iobroker">
                         <div class="card-header">
                             <span class="title"><img src="https://www.iobroker.net/favicon.ico">iobroker</span>
-                            <span class="status">loading</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
                             <a href="http://ubuntu.fritz.box:9003" target="_blank">ioBroker Admin-Panel</a><br>
                             <a href="http://ubuntu.fritz.box:9004" target="_blank">ioBroker Visualisierung</a><br>
                             <span class="ports">Ports:
                                 <span class="port" onclick="window.open('http://ubuntu.fritz.box:9003', '_blank');">9003, </span>
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:9004', '_blank');">9004, </span>
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:1883', '_blank');">1883</span>
+                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:9004', '_blank');">9004</span>
                             </span>
                         </div>
                     </div>
@@ -151,7 +163,7 @@
                         <div class="card-header">
                             <span class="title"><img
                                     src="https://raw.githubusercontent.com/tvheadend/tvheadend/master/src/webui/static/img/logo.png">tvheadend</span>
-                            <span class="status">loading</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
                             <a href="http://ubuntu.fritz.box:9981" target="_blank">TVheadend</a><br>
@@ -167,12 +179,12 @@
                         <div class="card-header">
                             <span class="title"><img
                                     src="https://github.com/billz/raspap-webgui/raw/master/app/img/raspAP-logo.png">RaspAP</span>
-                            <span class="status">loading</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
-                            <a href="http://ubuntu.fritz.box:????" target="_blank">RaspAP</a><br>
+                            <a href="http://ubuntu.fritz.box:9006" target="_blank">RaspAP</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:????', '_blank');">????</span>
+                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:9006', '_blank');">9006</span>
                             </span>
                         </div>
                     </div>
@@ -180,11 +192,11 @@
                 <div class="col-sm">
                     <div class="card" id="website">
                         <div class="card-header">
-                            <span class="title">webseite</span>
-                            <span class="status">loading</span>
+                            <span class="title">gui</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
-                            <a href="http://ubuntu.fritz.box" target="_blank">Webseite</a><br>
+                            <a href="http://ubuntu.fritz.box" target="_blank">GUI</a><br>
                             <span class="ports">Ports:
                                 <span class="port" onclick="window.open('http://ubuntu.fritz.box:80', '_blank');">80</span>
                             </span>
@@ -195,12 +207,12 @@
                     <div class="card" id="api">
                         <div class="card-header">
                             <span class="title">api</span>
-                            <span class="status">loading</span>
+                            <span class="status">LOADING</span>
                         </div>
                         <div class="card-body">
-                            <a href="http://ubuntu.fritz.box:????" target="_blank">API</a><br>
+                            <a href="http://ubuntu.fritz.box:9005" target="_blank">API</a><br>
                             <span class="ports">Ports:
-                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:????', '_blank');">????</span>
+                                <span class="port" onclick="window.open('http://ubuntu.fritz.box:9005', '_blank');">9005</span>
                             </span>
                         </div>
                     </div>

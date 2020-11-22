@@ -21,6 +21,11 @@ def db():
     return check_port('ubuntu.fritz.box', 3306)
 
 
+@status.route('/api/v1/resources/status/phpmyadmin', methods=['GET'])
+def phpmyadmin():
+    return check_port('ubuntu.fritz.box', 9002)
+
+
 @status.route('/api/v1/resources/status/mqtt', methods=['GET'])
 def mqtt():
     return check_port('ubuntu.fritz.box', 1883)
@@ -48,7 +53,7 @@ def tvheadend():
 
 @status.route('/api/v1/resources/status/raspap', methods=['GET'])
 def raspap():
-    return check_port('ubuntu.fritz.box', 1000)  # TODO
+    return check_port('ubuntu.fritz.box', 9006)
 
 
 @status.route('/api/v1/resources/status/website', methods=['GET'])
@@ -67,6 +72,7 @@ def all_services():
         'ssh': json.loads(ssh()),
         'octoprint': json.loads(octoprint()),
         'db': json.loads(db()),
+        'phpmyadmin': json.loads(phpmyadmin()),
         'mqtt': json.loads(mqtt()),
         'portainer': json.loads(portainer()),
         'pihole': json.loads(pihole()),
