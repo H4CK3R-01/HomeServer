@@ -15,7 +15,13 @@ $(document).on('shown.bs.tab', '.nav-tabs a', function(e) {
 })
 
 // Select other list
-$(document).on('change', '#list', function() {
+$(document).on('change', '#list', function () {
+    $("#wish").empty();
+    $("#wish_edit").empty();
+
+    $("#wish").append('<tr><td colspan=\"7\"><div class=\"d-flex justify-content-center\"><div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\">Loading...</span></div></div></td></tr>');
+    $("#wish_edit").append('<div class="card"><div class="card-body"><div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div></div></div>');
+
     // Clear price and check-all button
     $('#check_all').prop('checked', false);
     $('#preis_gesamt_anzahl').text("");
