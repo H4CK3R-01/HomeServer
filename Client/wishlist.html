@@ -60,9 +60,9 @@
             <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#show">Anzeigen</a></li>
             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#edit">Bearbeiten</a></li>
             <li class="ml-auto">
-                <form method="GET" action="">
+                <form class="form-inline" method="GET" action="">
                     <label for="list">Liste auswählen:</label>
-                    <select name="list" id="list"></select>
+                    <select class="form-control ml-sm-3" name="list" id="list"></select>
                 </form>
             </li>
         </ul>
@@ -136,15 +136,17 @@
                 </div>
 
                 <ul id="wish_edit">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-center">
-                                <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
+                    <li>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </li>
                 </ul>
             </div>
         </div>
