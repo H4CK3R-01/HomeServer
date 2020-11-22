@@ -6,68 +6,71 @@ function Circle(x, y, r, color) {
 }
 
 $(function () {
-    httpGetAsync("http://ubuntu.fritz.box:9005/api/v1/resources/rgb/color", "", generateCircles);
+    httpGetAsync("http://localhost:5000/api/v1/resources/rgb/color", "", generateCircles);
 })
 
 function generateCircles(data) {
-    data = JSON.parse(data);
+    if (isJson(data)) {
+        data = JSON.parse(data);
 
-    let canvas = document.getElementById('luefter');
-    let ctx = canvas.getContext('2d');
-    canvas.width = 400
-    canvas.height = 400
-    ctx.translate(canvas.width/2,canvas.height/2);
-    ctx.lineWidth = 2
+        let canvas = document.getElementById('luefter');
+        let ctx = canvas.getContext('2d');
+        canvas.width = 400
+        canvas.height = 400
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.lineWidth = 2
 
-    let circles = {}
-    for(let i = 0; i < 20; i++) {
-        let r = componentToHex(data.data[i][0]);
-        let g = componentToHex(data.data[i][1]);
-        let b = componentToHex(data.data[i][2]);
-        let color = r + g + b;
-        circles[i] = new Circle(Math.cos(18*i * (Math.PI / 180)) * 170, Math.sin(18*i * (Math.PI / 180)) * 170, 15, "#" + color);
-    }
-
-    $.each(circles, function( key, value ) {
-        ctx.fillStyle = value.color;
-        ctx.beginPath();
-        ctx.arc(value.x, value.y, value.r, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fill();
-    });
-
-    let thumbImg = document.createElement('img');
-    thumbImg.onload = function() {
-        ctx.lineWidth = 5
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(0, 0, 130, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.stroke();
-
-        ctx.drawImage(thumbImg, -100, -100, 200, 200);
-    };
-
-    thumbImg.src = '../img/luefter.png';
-
-    canvas.addEventListener('click', function(e) {
-        let xy = getMousePos(canvas, e);
-        let x = xy.x - 200;
-        let y = xy.y - 200;
-
-        for(let i = 0; i < 20; i++) {
-            if(Math.pow(x-(Math.cos(18*i * (Math.PI / 180)) * 170),2)+Math.pow(y-(Math.sin(18*i * (Math.PI / 180)) * 170),2) < Math.pow(15,2)) {
-                circles[i].color = document.getElementById("c").value;
-                ctx.fillStyle = document.getElementById("c").value
-                ctx.beginPath();
-                ctx.arc(Math.cos(18*i * (Math.PI / 180)) * 170, Math.sin(18*i * (Math.PI / 180)) * 170, 15, 0, Math.PI * 2, true);
-                ctx.closePath();
-                ctx.fill();
-                httpPostAsync("http://ubuntu.fritz.box:9005/api/v1/resources/rgb/color", circles, changeColor)
-                // httpPostAsync("http://192.168.178.177", circles, changeColor)
-            }
+        let circles = {}
+        for (let i = 0; i < 20; i++) {
+            let r = componentToHex(data.data[i][0]);
+            let g = componentToHex(data.data[i][1]);
+            let b = componentToHex(data.data[i][2]);
+            let color = r + g + b;
+            circles[i] = new Circle(Math.cos(18 * i * (Math.PI / 180)) * 170, Math.sin(18 * i * (Math.PI / 180)) * 170, 15, "#" + color);
         }
-    }, false);
+
+        $.each(circles, function (key, value) {
+            ctx.fillStyle = value.color;
+            ctx.beginPath();
+            ctx.arc(value.x, value.y, value.r, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+        });
+
+        let thumbImg = document.createElement('img');
+        thumbImg.onload = function () {
+            ctx.lineWidth = 5
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(0, 0, 130, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.drawImage(thumbImg, -100, -100, 200, 200);
+        };
+
+        thumbImg.src = '../img/luefter.png';
+
+        canvas.addEventListener('click', function (e) {
+            let xy = getMousePos(canvas, e);
+            let x = xy.x - 200;
+            let y = xy.y - 200;
+
+            for (let i = 0; i < 20; i++) {
+                if (Math.pow(x - (Math.cos(18 * i * (Math.PI / 180)) * 170), 2) + Math.pow(y - (Math.sin(18 * i * (Math.PI / 180)) * 170), 2) < Math.pow(15, 2)) {
+                    circles[i].color = document.getElementById("c").value;
+                    ctx.fillStyle = document.getElementById("c").value
+                    ctx.beginPath();
+                    ctx.arc(Math.cos(18 * i * (Math.PI / 180)) * 170, Math.sin(18 * i * (Math.PI / 180)) * 170, 15, 0, Math.PI * 2, true);
+                    ctx.closePath();
+                    ctx.fill();
+                    httpPostAsync("http://localhost:5000/api/v1/resources/rgb/color", circles, changeColor)
+                }
+            }
+        }, false);
+    } else {
+        $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich</div>');
+    }
 }
 
 function getMousePos(canvas, evt) {
@@ -82,7 +85,19 @@ function getMousePos(canvas, evt) {
 }
 
 function changeColor(data) {
-    console.log(data)
+    if (isJson(data)) {
+        if (data['status'] === 200) {
+            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich geändert!</div>');
+        } else {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
+        }
+    } else {
+        if (data === "Unauthorized Access") {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
+        } else {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich</div>');
+        }
+    }
 }
 
 function componentToHex(c) {
