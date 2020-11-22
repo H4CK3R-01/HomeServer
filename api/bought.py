@@ -1,5 +1,6 @@
 import datetime
 from flask import request, jsonify, Blueprint
+from auth import basicAuth
 from tools import execute_sql, prepare_sql
 
 bought = Blueprint('bought', __name__)
@@ -12,6 +13,7 @@ def bought_all():
 
 
 @bought.route('/api/v1/resources/bought', methods=['POST'])
+@basicAuth.login_required
 def add_bought():
     data = request.json
 

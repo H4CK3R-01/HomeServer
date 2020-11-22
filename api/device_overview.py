@@ -1,5 +1,6 @@
 from flask import request, jsonify, Blueprint
 from tools import execute_sql, prepare_sql
+from auth import basicAuth
 
 dev = Blueprint('dev', __name__)
 
@@ -11,6 +12,7 @@ def get_devices():
 
 
 @dev.route('/api/v1/resources/device', methods=['POST'])
+@basicAuth.login_required
 def add_device():
     data = request.json
     bezeichnung = data['bezeichnung']
@@ -50,6 +52,7 @@ def add_device():
 
 
 @dev.route('/api/v1/resources/device/<int:device_id>', methods=['PUT'])
+@basicAuth.login_required
 def update_device(device_id):
     data = request.json
     bezeichnung = data['bezeichnung']
@@ -80,6 +83,7 @@ def update_device(device_id):
 
 
 @dev.route('/api/v1/resources/device/<int:device_id>', methods=['DELETE'])
+@basicAuth.login_required
 def delete_device(device_id):
     prepare_sql("DELETE FROM devices WHERE id = %s", (device_id,))
     return jsonify({'status': 200, 'message': "Successfully removed id=" + str(device_id)})

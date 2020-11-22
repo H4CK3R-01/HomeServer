@@ -1,5 +1,7 @@
 import json
 from flask import request, jsonify, Blueprint
+from auth import basicAuth
+
 from tools import execute_sql, prepare_sql
 
 wish = Blueprint('wish', __name__)
@@ -30,6 +32,7 @@ def wish_one_list(wish_list):
 
 
 @wish.route('/api/v1/resources/wish/<string:wish_list>', methods=['POST'])
+@basicAuth.login_required
 def add_wish(wish_list):
     data = request.json
 
@@ -74,6 +77,7 @@ def add_wish(wish_list):
 
 
 @wish.route('/api/v1/resources/wish/update/<int:wish_id>', methods=['POST'])
+@basicAuth.login_required
 def update_wish(wish_id):
     data = request.json
     beschreibung = data['beschreibung']
@@ -112,6 +116,7 @@ def update_wish(wish_id):
 
 
 @wish.route('/api/v1/resources/wish/delete/<int:wish_id>', methods=['POST'])
+@basicAuth.login_required
 def delete_wish(wish_id):
     prepare_sql("DELETE FROM wunschliste WHERE id = %s", (wish_id,))
     return jsonify({'status': 200, 'message': "Successfully removed id=" + str(wish_id)})

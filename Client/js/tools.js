@@ -7,7 +7,10 @@ function httpGetAsync(url, data, callback) {
     }
 
     xmlHttp.open("GET", url, true); // true for asynchronous
-    xmlHttp.setRequestHeader("Authorization", "Basic " + btoa("florian" + ":" + "1234"));
+    if(localStorage.getItem('token') !== null) {
+        xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(localStorage.getItem('token') + ":" + "1"));
+    }
+    xmlHttp.timeout = 5000;
     xmlHttp.send(null);
 }
 
@@ -20,7 +23,10 @@ function httpPostAsync(url, data, callback) {
     }
 
     xmlHttp.open("POST", url, true); // true for asynchronous
-    xmlHttp.setRequestHeader("Authorization", "Basic " + btoa("florian" + ":" + "1234"));
+    if(localStorage.getItem('token') !== null) {
+        xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(localStorage.getItem('token') + ":" + "1"));
+    }
+    xmlHttp.timeout = 5000;
     xmlHttp.setRequestHeader('Content-Type', 'application/json');
     xmlHttp.send(JSON.stringify(data));
 }
@@ -34,7 +40,10 @@ function httpDeleteAsync(url, data, callback) {
     }
 
     xmlHttp.open("DELETE", url, true); // true for asynchronous
-    xmlHttp.setRequestHeader("Authorization", "Basic " + btoa("florian" + ":" + "1234"));
+    if(localStorage.getItem('token') !== null) {
+        xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(localStorage.getItem('token') + ":" + "1"));
+    }
+    xmlHttp.timeout = 5000;
     xmlHttp.send();
 }
 
@@ -47,7 +56,10 @@ function httpPutAsync(url, data, callback) {
     }
 
     xmlHttp.open("PUT", url, true); // true for asynchronous
-    xmlHttp.setRequestHeader("Authorization", "Basic " + btoa("florian" + ":" + "1234"));
+    if(localStorage.getItem('token') !== null) {
+        xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(localStorage.getItem('token') + ":" + "1"));
+    }
+    xmlHttp.timeout = 5000;
     xmlHttp.setRequestHeader('Content-Type', 'application/json');
     xmlHttp.send(JSON.stringify(data));
 }

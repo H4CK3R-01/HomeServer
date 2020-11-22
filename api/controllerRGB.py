@@ -3,6 +3,7 @@ import mysql.connector
 
 import requests
 from flask import jsonify, Blueprint, request
+from auth import basicAuth
 
 rgb = Blueprint('rgb', __name__)
 last_colors = {}
@@ -15,6 +16,7 @@ def get_color():
 
 
 @rgb.route('/api/v1/resources/rgb/color', methods=['POST'])
+@basicAuth.login_required
 def set_color():
     data = json.loads(request.get_data().decode("ascii"))
 
