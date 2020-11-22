@@ -21,4 +21,5 @@ app.register_blueprint(status)
 app.register_blueprint(rgb)
 app.register_blueprint(dev)
 
-app.run()
+if __name__ == "__main__":
+    app.run()
