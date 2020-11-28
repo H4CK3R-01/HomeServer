@@ -1,5 +1,10 @@
-Flask~=1.0.2
+Flask
 flask_cors
 mysql.connector
-gunicorn>=19,<20
-requests~=2.20.1
+gunicorn
+requests
+Flask-SQLAlchemy
+Flask-HTTPAuth
+passlib
+SQLAlchemy
+PyMySQL
