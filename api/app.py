@@ -10,7 +10,7 @@ from wishlist import wish
 
 app = flask.Flask(__name__)
 app.config['SECRET_KEY'] = 'yiQHZzmYOFvLJPXxWjIFIkNZKtVcXSDTDM70SGhKnBE526lW38GdbRARsNMeHgqraQ1uUpYL4PBfTAoJ9wCEVUOC'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Admin!123@ubuntu.fritz.box/mydb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Admin!123@server.fritz.box/mydb'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 CORS(app)

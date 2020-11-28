@@ -10,7 +10,7 @@ status = Blueprint('status', __name__)
 
 @status.route('/api/v1/resources/status/ssh', methods=['GET'])
 def ssh():
-    return check_port('ubuntu.fritz.box', 22, 'ssh')
+    return check_port('server.fritz.box', 22, 'ssh')
 
 
 @status.route('/api/v1/resources/status/octoprint', methods=['GET'])
@@ -20,52 +20,52 @@ def octoprint():
 
 @status.route('/api/v1/resources/status/db', methods=['GET'])
 def db():
-    return check_port('ubuntu.fritz.box', 3306, 'db')
+    return check_port('server.fritz.box', 3306, 'db')
 
 
 @status.route('/api/v1/resources/status/phpmyadmin', methods=['GET'])
 def phpmyadmin():
-    return check_port('ubuntu.fritz.box', 9002, 'phpmyadmin')
+    return check_port('server.fritz.box', 9002, 'phpmyadmin')
 
 
 @status.route('/api/v1/resources/status/mqtt', methods=['GET'])
 def mqtt():
-    return check_port('ubuntu.fritz.box', 1883, 'mqtt')
+    return check_port('server.fritz.box', 1883, 'mqtt')
 
 
 @status.route('/api/v1/resources/status/portainer', methods=['GET'])
 def portainer():
-    return check_port('ubuntu.fritz.box', 9000, 'portainer')
+    return check_port('server.fritz.box', 9000, 'portainer')
 
 
 @status.route('/api/v1/resources/status/pihole', methods=['GET'])
 def pihole():
-    return check_port('ubuntu.fritz.box', 9001, 'pihole')
+    return check_port('server.fritz.box', 9001, 'pihole')
 
 
 @status.route('/api/v1/resources/status/iobroker', methods=['GET'])
 def iobroker():
-    return check_port('ubuntu.fritz.box', 9003, 'iobroker')
+    return check_port('server.fritz.box', 9003, 'iobroker')
 
 
 @status.route('/api/v1/resources/status/tvheadend', methods=['GET'])
 def tvheadend():
-    return check_port('ubuntu.fritz.box', 9981, 'tvheadend')
+    return check_port('server.fritz.box', 9981, 'tvheadend')
 
 
 @status.route('/api/v1/resources/status/raspap', methods=['GET'])
 def raspap():
-    return check_port('ubuntu.fritz.box', 9006, 'raspap')
+    return check_port('server.fritz.box', 9006, 'raspap')
 
 
 @status.route('/api/v1/resources/status/website', methods=['GET'])
 def website():
-    return check_port('ubuntu.fritz.box', 80, 'website')
+    return check_port('server.fritz.box', 80, 'website')
 
 
 @status.route('/api/v1/resources/status/api', methods=['GET'])
 def api():
-    return check_port('ubuntu.fritz.box', 9005, 'api')
+    return check_port('server.fritz.box', 9005, 'api')
 
 
 @status.route('/api/v1/resources/status/all', methods=['GET'])
