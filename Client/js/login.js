@@ -5,7 +5,7 @@ $(function () {
 });
 
 $("#submit").on("click", function () {
-    httpGetAsyncOnlyLogin("http://localhost:5000/api/v1/resources/auth/token", "", login_callback)
+    httpGetAsyncOnlyLogin("http://server.fritz.box:9005/api/v1/resources/auth/token", "", login_callback)
     return false;
 });
 

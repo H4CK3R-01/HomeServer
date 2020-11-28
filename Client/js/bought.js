@@ -1,6 +1,6 @@
 // Get lists
 $(function () {
-    httpGetAsync("http://localhost:5000/api/v1/resources/bought/all", "", showBought);
+    httpGetAsync("http://server.fritz.box:9005/api/v1/resources/bought/all", "", showBought);
 
     // Tabs
     let url = document.location.toString();
@@ -34,7 +34,7 @@ $(document).on('click', '#save', function () {
     data['anzahl'] = $("#anzahl").val();
     data['preis'] = $("#preis").val();
 
-    httpPostAsync("http://localhost:5000/api/v1/resources/bought", data, add_result);
+    httpPostAsync("http://server.fritz.box:9005/api/v1/resources/bought", data, add_result);
 });
 
 $(document).on('click', '#reset', function () {

@@ -1,5 +1,5 @@
 $(function () {
-    httpGetAsync("http://localhost:5000/api/v1/resources/status/all", "", updateStatus);
+    httpGetAsync("http://server.fritz.box:9005/api/v1/resources/status/all", "", updateStatus);
 });
 
 

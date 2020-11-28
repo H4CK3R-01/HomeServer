@@ -6,7 +6,7 @@ function Circle(x, y, r, color) {
 }
 
 $(function () {
-    httpGetAsync("http://localhost:5000/api/v1/resources/rgb/color", "", generateCircles);
+    httpGetAsync("http://server.fritz.box:9005/api/v1/resources/rgb/color", "", generateCircles);
 })
 
 function generateCircles(data) {
@@ -64,7 +64,7 @@ function generateCircles(data) {
                     ctx.arc(Math.cos(18 * i * (Math.PI / 180)) * 170, Math.sin(18 * i * (Math.PI / 180)) * 170, 15, 0, Math.PI * 2, true);
                     ctx.closePath();
                     ctx.fill();
-                    httpPostAsync("http://localhost:5000/api/v1/resources/rgb/color", circles, changeColor)
+                    httpPostAsync("http://server.fritz.box:9005/api/v1/resources/rgb/color", circles, changeColor)
                 }
             }
         }, false);

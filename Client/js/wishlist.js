@@ -1,6 +1,6 @@
 // Get lists
 $(function () {
-    httpGetAsync('http://localhost:5000/api/v1/resources/wish/lists', "", loadLists);
+    httpGetAsync('http://server.fritz.box:9005/api/v1/resources/wish/lists', "", loadLists);
 
     // Tabs
     let url = document.location.toString();
@@ -27,7 +27,7 @@ $(document).on('change', '#list', function () {
     $('#preis_gesamt_anzahl').text("");
     $('#preis_gesamt_eins').text("");
 
-    httpGetAsync('http://localhost:5000/api/v1/resources/wish/list/' + this.value, "", showWish);
+    httpGetAsync('http://server.fritz.box:9005/api/v1/resources/wish/list/' + this.value, "", showWish);
     setGetParameter("list", this.value);
 });
 
@@ -51,7 +51,7 @@ $(document).on('click', '#save', function () {
     data['anzahl'] = $("#anzahl").val();
     data['preis'] = $("#preis").val();
 
-    httpPostAsync("http://localhost:5000/api/v1/resources/wish/" + $('#list').val(), data, add_result);
+    httpPostAsync("http://server.fritz.box:9005/api/v1/resources/wish/" + $('#list').val(), data, add_result);
 });
 
 $(document).on('click', '#reset', function () {
@@ -69,7 +69,7 @@ $(document).on('click', '.save', function () {
     data['anzahl'] = $("#anzahl_" + id).val();
     data['preis'] = $("#preis_" + id).val();
     data['liste'] = $("#liste_" + id).val();
-    httpPostAsync("http://localhost:5000/api/v1/resources/wish/update/" + id, data, update_result);
+    httpPostAsync("http://server.fritz.box:9005/api/v1/resources/wish/update/" + id, data, update_result);
 });
 
 // Reset input
@@ -83,7 +83,7 @@ $(document).on('click', '.reset', function () {
 // Delete wish
 $(document).on('click', '.delete', function () {
     let id = this.id.substring(7);
-    httpPostAsync("http://localhost:5000/api/v1/resources/wish/delete/" + id, "", delete_result);
+    httpPostAsync("http://server.fritz.box:9005/api/v1/resources/wish/delete/" + id, "", delete_result);
 });
 
 
@@ -138,7 +138,7 @@ function loadLists(data) {
             else $select.val("wunschliste");
         }
 
-        httpGetAsync('http://localhost:5000/api/v1/resources/wish/list/' + $select.val(), "", showWish);
+        httpGetAsync('http://server.fritz.box:9005/api/v1/resources/wish/list/' + $select.val(), "", showWish);
     } else {
         $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich!</div>');
     }
