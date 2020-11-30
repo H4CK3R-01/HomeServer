@@ -1,6 +1,6 @@
 $(function () {
-    if (localStorage.getItem('token') !== null) {
-        $("#notification_area").append('<div class="alert alert-success" role="alert">You are already logged in!</div>')
+    if (getCookie('token') !== "") {
+        $("#notification_area").append('<div class="alert alert-success" role="alert">You are already logged in!</div>');
     }
 });
 
