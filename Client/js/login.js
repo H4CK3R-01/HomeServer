@@ -5,7 +5,7 @@ $(function () {
 });
 
 $("#submit").on("click", function () {
-    httpGetAsyncOnlyLogin("http://server.fritz.box:9005/api/v1/resources/auth/token", "", login_callback)
+    httpGetAsyncOnlyLogin("http://server.fritz.box:9005/api/v1/resources/auth/token", "", login_callback);
     return false;
 });
 
@@ -24,10 +24,10 @@ function httpGetAsyncOnlyLogin(url, data, callback) {
 
 function login_callback(data) {
     if (data === "Unauthorized Access") {
-        $("#notification_area").append('<div class="alert alert-danger" role="alert">Login failed. Please check username and password!</div>')
+        $("#notification_area").append('<div class="alert alert-danger" role="alert">Login failed. Please check username and password!</div>');
     } else {
-        localStorage.setItem('token', JSON.parse(data)['token']);
-        window.location.href = "status.html";
+        createCookie("token", JSON.parse(data)['token'], 5);
+        window.location.href = "index.html";
     }
     return false;
 }
