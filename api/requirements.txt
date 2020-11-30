@@ -8,3 +8,4 @@ Flask-HTTPAuth
 passlib
 SQLAlchemy
 PyMySQL
+itsdangerous
