@@ -1,4 +1,5 @@
 import json
+import socket
 
 import requests
 from flask import jsonify, Blueprint, request
@@ -47,9 +48,14 @@ def set_color():
         hex_color = '%02x%02x%02x' % (r, g, b)
         colors.append(int(hex_color, 16))
 
-    url = 'http://192.168.178.177'
-    x = requests.post(url, data=json.dumps(colors))
-    if x.status_code == 200:
-        return jsonify({'status': 200})
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex(("192.168.178.177", 80))
+    if result == 0:
+        url = 'http://192.168.178.177'
+        x = requests.post(url, data=json.dumps(colors))
+        if x.status_code == 200:
+            return jsonify({'status': 200})
+        else:
+            return jsonify({'status': 500})
     else:
-        return jsonify({'status': 500})
+        return jsonify({'status': 500, 'message': 'No connection to arduino'})
