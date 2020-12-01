@@ -1,9 +1,11 @@
 import json
+import os
 import socket
 
-from flask import jsonify, Blueprint
+from flask import jsonify, Blueprint, g
 
 status = Blueprint('status', __name__, url_prefix='/api/v1/resources/status')
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 
 @status.route('/ssh', methods=['GET'])
@@ -87,6 +89,8 @@ def all_services():
 
 def check_port(host, port, name):
     auth = False
+    if g.user is not None:
+        auth = True
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = sock.connect_ex((host, port))
@@ -102,7 +106,7 @@ def check_port(host, port, name):
     sock.close()
 
     if auth:
-        with open("../list.config") as config:
+        with open(os.path.join(__location__, '../list.config')) as config:
             config_data = json.load(config)
 
         if name in config_data['credentials']:
