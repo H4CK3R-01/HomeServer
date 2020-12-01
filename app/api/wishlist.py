@@ -77,11 +77,10 @@ def add_wish(wish_list):
     result = cursor.fetchall()
 
     if len(result) == 0:
-        cursor.execute()
         cursor.execute('INSERT INTO wunschliste (beschreibung, link, anzahl, bild, preis, liste) '
                        'VALUES (?, ?, ?, ?, ?, ?)', (beschreibung, link, anzahl, bild, preis, wish_list))
-        wish_id = cursor.getlastrowid()
         db.commit()
+        wish_id = cursor.lastrowid
         return jsonify({'status': 200, 'message': "Successfully added id=" + str(wish_id)})
     else:
         return jsonify({'status': 500, 'message': "Already in list"})

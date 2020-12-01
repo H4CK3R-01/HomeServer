@@ -58,7 +58,7 @@ def add_bought():
         datum = datetime.date.today().strftime("%Y")
         cursor.execute('INSERT INTO gekauft (beschreibung, link, anzahl, bild, preis, jahr) '
                        'VALUES (?, ?, ?, ?, ?, ?)', (beschreibung, link, anzahl, bild, preis, datum))
-        bought_id = cursor.getlastrowid()
+        bought_id = cursor.lastrowid
         db.commit()
         return jsonify({'status': 200, 'message': "Successfully added id=" + str(bought_id)})
     else:

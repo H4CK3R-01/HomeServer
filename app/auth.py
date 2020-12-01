@@ -72,11 +72,10 @@ def login_post():
     error = None
     cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
     user_from_db = cursor.fetchone()
-    print(bytes(user_from_db[2]).decode())
 
     if user_from_db is None:
         error = 'Incorrect username.'
-    elif not check_password_hash(bytes(user_from_db[2]).decode(), password):
+    elif not check_password_hash(user_from_db[2], password):
         error = 'Incorrect password.'
 
     if error is None:

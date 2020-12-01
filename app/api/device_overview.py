@@ -48,7 +48,7 @@ def add_device():
     if len(result) == 0:
         cursor.execute('INSERT INTO devices (bezeichnung, anzahl, bild, datenblatt, library) '
                        'VALUES (%s, %s, %s, %s, %s)', (bezeichnung, anzahl, bild, datenblatt, library))
-        device_id = cursor.getlastrowid()
+        device_id = cursor.lastrowid
         db.commit()
 
         return jsonify({'status': 200, 'message': "Successfully added id=" + str(device_id)})
