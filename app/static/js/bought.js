@@ -125,7 +125,7 @@ function add_result(data) {
             let anzahl = $("#anzahl").val();
             let img = $("#bild").val();
             let preis = $("#preis").val();
-            let jahr = 2020;
+            let jahr = new Date().getFullYear();
 
             $("#bought").append(generate_table_row(id, preis, img, desc, host, anzahl, jahr));
             $("#reset").trigger("click");
