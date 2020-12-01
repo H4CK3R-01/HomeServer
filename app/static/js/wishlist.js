@@ -83,7 +83,7 @@ $(document).on('click', '.reset', function () {
 // Delete wish
 $(document).on('click', '.delete', function () {
     let id = this.id.substring(7);
-    httpPostAsync("/api/v1/resources/wish/" + id, "", delete_result);
+    httpDeleteAsync("/api/v1/resources/wish/" + id, "", delete_result);
 });
 
 
@@ -298,7 +298,7 @@ function add_result(data) {
     if (isJson(data)) {
         data = JSON.parse(data)
         if (data['status'] === 200) {
-            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich gelöscht!</div>')
+            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich hinzugefügt!</div>')
             let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
             let desc = $("#beschreibung").val();
             let link = $("#link").val();
