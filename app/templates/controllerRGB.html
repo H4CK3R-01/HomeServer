@@ -1,51 +1,23 @@
-<!DOCTYPE HTML>
-<html lang="de">
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>RGB Controller - Raspberry Pi</title>
-    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
-    <link href="/static/css/components.css" rel="stylesheet">
-    <link href="/static/css/controllerRGB.css" rel="stylesheet">
-</head>
-<body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+{% extends 'base.html' %}
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="wishlist.html">Wunschliste</a></li>
-                <li class="nav-item"><a class="nav-link" href="bought.html">Gekauft</a></li>
-                <li class="nav-item"><a class="nav-link" href="status.html">Server Status</a></li>
-                <li class="nav-item"><a class="nav-link" href="controllerRGB.html">RGB Controller</a></li>
-                <li class="nav-item"><a class="nav-link" href="device_overview.html">Geräte</a></li>
-            </ul>
-        </div>
-        <i onclick="if (getCookie('token') !== '') { window.location.href = 'user.html'; } else { window.location.href = 'login.html'; }" class="material-icons">account_circle</i>
-    </nav>
-</header>
+{% block title %}
+RGB Controller
+{% endblock %}
 
-<main>
-    <div class="container">
+{% block css %}
+<link href="/static/css/controllerRGB.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
         <h1>RGB Controller</h1>
 
         <div id="notification_area"></div>
         <input class="hidden" id="c" tabindex=-1 type="color">
         <canvas id="luefter"></canvas>
 
-    </div>
-</main>
+{% endblock %}
 
-<footer class="footer container"></footer>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-<script src="/static/js/tools.js"></script>
+{% block js %}
 <script src="/static/js/controllerRGB.js"></script>
-</body>
-</html>
+{% endblock %}
