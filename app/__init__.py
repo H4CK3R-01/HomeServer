@@ -1,18 +1,17 @@
 from flask import Flask
 
-from app.auth import auth
 from app.api.bought import bought
 from app.api.controllerRGB import rgb
 from app.api.device_overview import dev
 from app.api.status import status
 from app.api.wishlist import wish
-
+from app.auth import auth
 from app.gui.bought import bought as bought_gui
 from app.gui.controllerRGB import rgb as rgb_gui
 from app.gui.device_overview import device as device_gui
+from app.gui.index import index as index_gui
 from app.gui.status import status as status_gui
 from app.gui.wishlist import wish as wish_gui
-from app.gui.index import index as index_gui
 
 
 def has_no_empty_params(rule):
@@ -44,6 +43,4 @@ def create_app():
     return app
 
 
-app = create_app()
-print(app.url_map)
-app.run()
+create_app().run()

@@ -27,6 +27,7 @@ def login_required(view):
         if g.user is None:
             return redirect(url_for('auth.login_get'))
         return view(**kwargs)
+
     return wrapped_view
 
 
@@ -49,7 +50,8 @@ def register():
             error = 'User {} is already registered.'.format(username)
 
         if error is None:
-            cursor.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)', (username, generate_password_hash(password)))
+            cursor.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)',
+                           (username, generate_password_hash(password)))
             db.commit()
             return redirect(url_for('auth.login_get'))
 

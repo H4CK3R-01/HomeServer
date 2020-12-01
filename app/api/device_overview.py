@@ -1,4 +1,5 @@
 from flask import request, jsonify, Blueprint
+
 from app.auth import login_required
 from app.db import get_db
 

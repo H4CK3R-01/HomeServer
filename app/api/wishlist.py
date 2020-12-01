@@ -2,9 +2,9 @@ import json
 import os
 
 from flask import request, jsonify, Blueprint
-from app.db import get_db
 
 from app.auth import login_required
+from app.db import get_db
 
 wish = Blueprint('wish', __name__, url_prefix='/api/v1/resources/wish')
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
