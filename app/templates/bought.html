@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Gekauft - Raspberry Pi</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+    <link href="/static/css/components.css" rel="stylesheet">
+    <link href="/static/css/bought.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="wishlist">Wunschliste</a></li>
+                <li class="nav-item"><a class="nav-link" href="bought">Gekauft</a></li>
+                <li class="nav-item"><a class="nav-link" href="status">Server Status</a></li>
+                <li class="nav-item"><a class="nav-link" href="rgb">RGB Controller</a></li>
+                <li class="nav-item"><a class="nav-link" href="device">Geräte</a></li>
+            </ul>
+        </div>
+        <i onclick="if (getCookie('token') !== '') { window.location.href = 'user.html'; } else { window.location.href = 'login.html'; }" class="material-icons">account_circle</i>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h1>Gekauft</h1>
+
+        <div id="notification_area"></div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#show">Anzeigen</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#edit">Bearbeiten</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="show" role="tabpanel">
+                <div class="table-responsive">
+                    <table class="table table-striped borderless" id="table">
+                        <thead>
+                        <tr>
+                            <th><input id="check_all" type="checkbox"></th>
+                            <th></th>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Anzahl</th>
+                            <th>Preis einzeln</th>
+                            <th>Preis gesamt</th>
+                            <th>Jahr</th>
+                        </tr>
+                        </thead>
+                        <tbody id="bought">
+                        <tr>
+                            <td colspan="8">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Gesamtpreis (alle ausgewählte Zeilen)</td>
+                            <td></td>
+                            <td id="preis_gesamt_eins"></td>
+                            <td id="preis_gesamt_anzahl"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="edit" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">Produkt hinzufügen</div>
+                    <div class="card-body">
+                        <div class="form-group" id="add_form">
+                            <label for="beschreibung">Beschreibung:</label>
+                            <input autocomplete="off" class="form-control form-control-sm" id="beschreibung"
+                                   name="beschreibung" placeholder="Beschreibung" type="text">
+                            <label for="link">Link:</label>
+                            <input autocomplete="off" class="form-control form-control-sm" id="link" name="link"
+                                   placeholder="Link" type="text">
+                            <label for="bild">Bild:</label>
+                            <input autocomplete="off" class="form-control form-control-sm" id="bild" name="bild"
+                                   placeholder="Bild" type="text">
+                            <label for="anzahl">Anzahl:</label>
+                            <input autocomplete="off" class="form-control form-control-sm" id="anzahl" name="anzahl"
+                                   placeholder="Anzahl" type="text">
+                            <label for="preis">Preis:</label>
+                            <input autocomplete="off" class="form-control form-control-sm" id="preis" name="preis"
+                                   placeholder="Preis" type="text">
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary" id="save" type="submit">Speichern</button>
+                        <button class="btn btn-secondary" id="reset" type="reset">Zurücksetzen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer container"></footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script src="/static/js/tools.js"></script>
+<script src="/static/js/bought.js"></script>
+</body>
+</html>

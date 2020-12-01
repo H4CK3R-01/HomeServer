@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Geräteliste - Raspberry Pi</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+    <link href="/static/css/components.css" rel="stylesheet">
+    <link href="/static/css/device_overview.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="wishlist.html">Wunschliste</a></li>
+                <li class="nav-item"><a class="nav-link" href="bought.html">Gekauft</a></li>
+                <li class="nav-item"><a class="nav-link" href="status.html">Server Status</a></li>
+                <li class="nav-item"><a class="nav-link" href="controllerRGB.html">RGB Controller</a></li>
+                <li class="nav-item"><a class="nav-link" href="device_overview.html">Geräte</a></li>
+            </ul>
+        </div>
+        <i onclick="if (getCookie('token') !== '') { window.location.href = 'user.html'; } else { window.location.href = 'login.html'; }" class="material-icons">account_circle</i>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h1>Geräteliste</h1>
+
+        <div id="notification_area"></div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#show">Anzeigen</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#edit">Bearbeiten</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="show" role="tabpanel">
+                <div class="table-responsive">
+                    <table class="table table-striped borderless" id="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Bezeichnung<br>Datenblatt<br>Library</th>
+                            <th>Anzahl</th>
+                        </tr>
+                        </thead>
+                        <tbody id="devices">
+                        <tr>
+                            <td colspan="4">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="edit" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">Produkt hinzufügen</div>
+                    <div class="card-body">
+                        <div class="form-group" id="add_form">
+                            <label for="bezeichnung">Bezeichnung:</label>
+                            <input autocomplete="off" class="form-control form-control-sm" id="bezeichnung"
+                                   name="bezeichnung" placeholder="Bezeichnung" type="text">
+                            <label for="anzahl">Anzahl:</label>
+                            <input autocomplete="off" class="form-control form-control-sm" id="anzahl" name="anzahl"
+                                   placeholder="Anzahl" type="text">
+                            <label for="bild">Bild:</label>
+                            <input autocomplete="off" class="form-control form-control-sm" id="bild" name="bild"
+                                   placeholder="Bild" type="text">
+                            <label for="datenblatt">Datenblatt:</label>
+                            <input autocomplete="off" class="form-control form-control-sm" id="datenblatt"
+                                   name="datenblatt"
+                                   placeholder="Datenblatt" type="text">
+                            <label for="library">Library:</label>
+                            <input autocomplete="off" class="form-control form-control-sm" id="library" name="library"
+                                   placeholder="Library" type="text">
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary" id="save" type="submit">Speichern</button>
+                        <button class="btn btn-secondary" id="reset" type="reset">Zurücksetzen</button>
+                    </div>
+                </div>
+
+                <ul id="devices_edit">
+                    <li>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer container"></footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script src="/static/js/tools.js"></script>
+<script src="/static/js/device_overview.js"></script>
+</body>
+</html>
