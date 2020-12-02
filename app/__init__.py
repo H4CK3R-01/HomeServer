@@ -35,6 +35,3 @@ def create_app():
     app.register_blueprint(device_gui)
 
     return app
-
-
-create_app().run()
