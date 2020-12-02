@@ -32,6 +32,7 @@ def login_required(view):
 
 
 @auth.route('/register', methods=['POST'])
+@login_required
 def register_post():
     username = request.form['user']
     password = request.form['password']
