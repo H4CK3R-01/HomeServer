@@ -31,32 +31,35 @@ def login_required(view):
     return wrapped_view
 
 
-@auth.route('/register', methods=('GET', 'POST'))
-def register():
-    if request.method == 'POST':
-        username = request.form['user']
-        password = request.form['password']
-        db = get_db()
-        cursor = db.cursor(prepared=True)
-        error = None
+@auth.route('/register', methods=['POST'])
+def register_post():
+    username = request.form['user']
+    password = request.form['password']
+    db = get_db()
+    cursor = db.cursor(prepared=True)
+    error = None
 
-        if not username:
-            error = 'Username is required.'
-        elif not password:
-            error = 'Password is required.'
+    if not username:
+        error = 'Benutzername wird benötigt.'
+    elif not password:
+        error = 'Passwort wird benötigt.'
 
-        cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
-        if cursor.fetchone() is not None:
-            error = 'User {} is already registered.'.format(username)
+    cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
+    if cursor.fetchone() is not None:
+        error = 'Benutzer "{}" ist bereits registriert.'.format(username)
 
-        if error is None:
-            cursor.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)',
-                           (username, generate_password_hash(password)))
-            db.commit()
-            return redirect(url_for('auth.login_get'))
+    if error is None:
+        cursor.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)',
+                       (username, generate_password_hash(password)))
+        db.commit()
+        return redirect(url_for('auth.login_get'))
 
-        flash(error)
+    flash(error)
+    return redirect(url_for('auth.register_get'))
 
+
+@auth.route('/register', methods=['GET'])
+def register_get():
     return render_template('register.html')
 
 
@@ -76,9 +79,9 @@ def login_post():
     user_from_db = cursor.fetchone()
 
     if user_from_db is None:
-        error = 'Incorrect username.'
+        error = 'Falscher Benutzername oder falsches Passwort.'
     elif not check_password_hash(user_from_db[2], password):
-        error = 'Incorrect password.'
+        error = 'Falscher Benutzername oder falsches Passwort.'
 
     if error is None:
         session.clear()
@@ -86,7 +89,7 @@ def login_post():
         return redirect(url_for('index.start'))
 
     flash(error)
-    return redirect(url_for('auth.login_post'))
+    return redirect(url_for('auth.login_get'))
 
 
 @auth.route('/logout')

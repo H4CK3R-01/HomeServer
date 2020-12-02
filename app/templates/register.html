@@ -12,8 +12,15 @@ Register
 
 {% block content %}
         <h1>Register</h1>
-
-        <div id="notification_area"></div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div id="notification_area">
+                {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
         <form method="POST">
             <div class="form-group">
                 <label for="user">Benutzername</label>
