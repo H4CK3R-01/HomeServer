@@ -61,12 +61,12 @@ def register_post():
 
 @auth.route('/register', methods=['GET'])
 def register_get():
-    return render_template('register.html')
+    return render_template('register.html', username=g.user)
 
 
 @auth.route('/login', methods=['GET'])
 def login_get():
-    return render_template('login.html')
+    return render_template('login.html', username=g.user)
 
 
 @auth.route('/login', methods=['POST'])
