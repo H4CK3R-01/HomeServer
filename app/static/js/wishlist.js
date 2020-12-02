@@ -7,6 +7,26 @@ $(function () {
     if (url.match('#')) {
         $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
     }
+
+    $('#wish_edit').sortable({
+        placeholder: {
+            element: function(clone, ui) {
+                return $('<li class="selected">'+clone[0].innerHTML+'</li>').css({
+                    "opacity": 0.3,
+                    "border": "1px dashed #000000"
+                });
+            },
+            update: function() {
+            }
+        },
+        update: function (event, ui) {
+            let sorted_array = [];
+            $('#wish_edit li .card').each(function () {
+                sorted_array.push($(this).attr('id').substring(5));
+            });
+            httpPostAsync('/api/v1/resources/wish/sort/', sorted_array, sort_callback)
+        }
+    }).disableSelection();
 });
 
 // Tabs
@@ -199,7 +219,7 @@ function generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, lin
 }
 
 function generate_edit_view(id, desc, img, link, anzahl, preis, liste) {
-    return '<div class="card" id="card_' + id + '">' +
+    return '<li><div class="card" id="card_' + id + '">' +
         '<div class="card-header"><input type="text" class="form-control form-control-sm" placeholder="' + desc + '" name="beschreibung" id="beschreibung_' + id + '" value="' + desc + '" autocomplete="off"></div>' +
         '<div class="card-body">' +
         '<div class="row">' +
@@ -229,8 +249,26 @@ function generate_edit_view(id, desc, img, link, anzahl, preis, liste) {
         '<button class="btn btn-danger delete" id="delete_' + id + '">Löschen</button>' +
         '</div>' +
         '</div>' +
-        '</div>'
+        '</div></li>'
 }
+
+
+function sort_callback(data) {
+    data = JSON.parse(data)
+    if (data['status'] === 200) {
+        $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich gespeichert!</div>')
+
+        //$("#wish").empty().append('<tr><td colspan=\"7\"><div class=\"d-flex justify-content-center\"><div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\">Loading...</span></div></div></td></tr>');
+        //httpGetAsync('/api/v1/resources/wish/list/' + this.value, "", showWish);  // TODO Sort table without reload
+    } else {
+        if (data === "Unauthorized Access") {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
+        } else {
+            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
+        }
+    }
+}
+
 
 function delete_result(data) {
     if (isJson(data)) {

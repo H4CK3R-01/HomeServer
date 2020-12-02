@@ -128,6 +128,28 @@ def update_wish(wish_id):
     return jsonify({'status': 200, 'message': "Successfully updated id=" + str(wish_id)})
 
 
+@wish.route('/sort/', methods=['POST'])
+@login_required
+def sort_wish():
+    data = request.json
+
+    if type(data) != list:
+        return jsonify({'status': 500, 'message': "No list provided"})
+
+    db = get_db()
+    cursor = db.cursor(prepared=True)
+
+    i = 0
+    while i < len(data):
+        print(str(i) + " " + data[i])
+        cursor.execute('UPDATE wunschliste SET wichtigkeit = ? WHERE id = ?', (i, data[i]))
+        i = i + 1
+
+    db.commit()
+
+    return jsonify({'status': 200, 'message': "Successfully updated"})
+
+
 @wish.route('/<int:wish_id>', methods=['DELETE'])
 @login_required
 def delete_wish(wish_id):

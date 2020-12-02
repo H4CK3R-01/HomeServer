@@ -25,9 +25,17 @@ td {
 }
 
 #wish_edit .card {
-    margin-top: 10px;
+    margin-top: 0;
 }
 
 #wish_edit .btn {
     margin-right: 5px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+#wish_edit li {
+    margin-top: 10px;
 }
