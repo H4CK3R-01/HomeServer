@@ -14,12 +14,6 @@ from app.gui.status import status as status_gui
 from app.gui.wishlist import wish as wish_gui
 
 
-def has_no_empty_params(rule):
-    defaults = rule.defaults if rule.defaults is not None else ()
-    arguments = rule.arguments if rule.arguments is not None else ()
-    return len(defaults) >= len(arguments)
-
-
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
