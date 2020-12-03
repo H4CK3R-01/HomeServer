@@ -39,8 +39,8 @@ def set_color():
         cursor = db.cursor(prepared=True)
         cursor.execute('SELECT * FROM farben_luefter WHERE led_id = ?', (key,))
         result = cursor.fetchall()
-        if len(result) == 0:
-            cursor.execute('UPDATE farben_luefter SET r = ?, g = ?, b = ? WHERE led_id = ?', (r, g, b, key))  # TODO Doesn't work
+        if len(result) != 0:
+            cursor.execute('UPDATE farben_luefter SET r = ?, g = ?, b = ? WHERE led_id = ?', (r, g, b, key))
         else:
             cursor.execute('INSERT INTO farben_luefter (r, g, b, led_id) VALUES (?, ?, ?, ?)', (r, g, b, key))
         db.commit()
