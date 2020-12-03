@@ -6,6 +6,7 @@ RGB Controller
 
 {% block css %}
 <link href="/static/css/controllerRGB.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
 {% endblock %}
 
 
@@ -13,11 +14,34 @@ RGB Controller
         <h1>RGB Controller</h1>
 
         <div id="notification_area"></div>
-        <input class="hidden" id="c" tabindex=-1 type="color">
-        <canvas id="luefter"></canvas>
-
+        <div class="row">
+                <div class="col-6" id="picker"></div>
+                <div class="col-6">
+                        <ul class="nav nav-tabs">
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#luefter0_tab">Lüfter 1</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#luefter1_tab">Lüfter 2</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#luefter2_tab">Lüfter 3</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#luefter3_tab">Lüfter 4</a></li>
+                        </ul>
+                        <div class="tab-content">
+                                <div class="tab-pane active" id="luefter0_tab" role="tabpanel">
+                                        <canvas id="luefter0"></canvas>
+                                </div>
+                                <div class="tab-pane" id="luefter1_tab" role="tabpanel">
+                                        <canvas id="luefter1"></canvas>
+                                </div>
+                                <div class="tab-pane" id="luefter2_tab" role="tabpanel">
+                                        <canvas id="luefter2"></canvas>
+                                </div>
+                                <div class="tab-pane" id="luefter3_tab" role="tabpanel">
+                                        <canvas id="luefter3"></canvas>
+                                </div>
+                        </div>
+                </div>
+        </div>
 {% endblock %}
 
 {% block js %}
 <script src="/static/js/controllerRGB.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
 {% endblock %}
