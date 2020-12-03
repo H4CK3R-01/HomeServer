@@ -1,5 +1,5 @@
 $(function () {
-    httpGetAsync('/api/v1/resources/device/', "", showDevices);
+    httpGetAsync('/api/v1/resources/device/', "", show_devices_callback);
 
     // Tabs
     let url = document.location.toString();
@@ -21,7 +21,7 @@ $(document).on('click', '#save', function () {
     data['datenblatt'] = $("#datenblatt").val();
     data['library'] = $("#library").val();
 
-    httpPostAsync("/api/v1/resources/device/", data, add_result);
+    httpPostAsync("/api/v1/resources/device/", data, add_device_callback);
 });
 
 $(document).on('click', '#reset', function () {
@@ -38,7 +38,7 @@ $(document).on('click', '.save', function () {
     data['bild'] = $("#bild_" + id).val();
     data['datenblatt'] = $("#datenblatt_" + id).val();
     data['library'] = $("#library_" + id).val();
-    httpPutAsync("/api/v1/resources/device/" + id, data, update_result);
+    httpPutAsync("/api/v1/resources/device/" + id, data, update_device_callback);
 });
 
 // Reset input
@@ -52,44 +52,9 @@ $(document).on('click', '.reset', function () {
 // Delete device
 $(document).on('click', '.delete', function () {
     let id = this.id.substring(7);
-    httpDeleteAsync("/api/v1/resources/device/" + id, "", delete_result);
+    httpDeleteAsync("/api/v1/resources/device/" + id, "", delete_device_callback);
 });
 
-function showDevices(data) {
-    $("#devices").empty();
-    $("#devices_edit").empty();
-
-    if (isJson(data)) {
-        data = JSON.parse(data);
-        $.each(data['data'], (key) => {
-            let device = data['data'][key];
-            let id = device[0];
-            let bezeichnung = device[1];
-            let anzahl = device[2];
-            let bild = device[3];
-            let datenblatt = device[4];
-            let datenblatt_host;
-            try {
-                datenblatt_host = new URL(datenblatt).host;
-            } catch (TypeError) {
-                datenblatt_host = "";
-            }
-            let library = device[5];
-            let library_host;
-            try {
-                library_host = new URL(library).host;
-            } catch (TypeError) {
-                library_host = "";
-            }
-
-            $("#devices").append(generate_table_row(id, bezeichnung, anzahl, bild, datenblatt, datenblatt_host, library, library_host));
-
-            $("#devices_edit").append(generate_edit_view(id, bezeichnung, anzahl, bild, datenblatt, library))
-        });
-    } else {
-        $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich!</div>');
-    }
-}
 
 function generate_table_row(id, bezeichnung, anzahl, img, datenblatt, datenblatt_host, library, library_host) {
     return "<tr id='row_" + id + "'>" +
@@ -133,107 +98,144 @@ function generate_edit_view(id, bezeichnung, anzahl, bild, datenblatt, library) 
         '</div>'
 }
 
-function delete_result(data) {
-    if (isJson(data)) {
-        data = JSON.parse(data)
-        if (data['status'] === 200) {
-            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich gelöscht!</div>')
-            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-            $("#card_" + id).remove();
-            $("#row_" + id).remove();
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
-        }
-    } else {
-        if (data === "Unauthorized Access") {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
-        }
-    }
-}
 
-function update_result(data) {
-    if (isJson(data)) {
+// Callbacks
+function show_devices_callback(data, status) {
+    if (status === 200) { // OK
+        $("#devices").empty();
+        $("#devices_edit").empty();
         data = JSON.parse(data);
-        if (data['status'] === 200) {
-            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich geändert!</div>');
-            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-            if ($("#liste_before_" + id).val() !== $("#liste_" + id).val()) {
-                $("#card_" + id).remove();
-                $("#row_" + id).remove();
-            } else {
-                $("#card_" + id).find("input").each(function () {
-                    $(this).attr('placeholder', $(this).val());
-                });
-
-                let bezeichnung = $("#bezeichnung_" + id).val();
-                let anzahl = $("#anzahl_" + id).val();
-                let bild = $("#bild_" + id).val();
-                let datenblatt = $("#datenblatt_" + id).val();
-                let datenblatt_host;
-                try {
-                    datenblatt_host = new URL(datenblatt).host;
-                } catch (TypeError) {
-                    datenblatt_host = "";
-                }
-                let library = $("#library_" + id).val();
-                let library_host;
-                try {
-                    library_host = new URL(library).host;
-                } catch (TypeError) {
-                    library_host = "";
-                }
-
-                $("#row_" + id).replaceWith(generate_table_row(id, bezeichnung, anzahl, bild, datenblatt, datenblatt_host, library, library_host));
-            }
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
-        }
-    } else {
-        if (data === "Unauthorized Access") {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
-        }
-    }
-}
-
-function add_result(data) {
-    if (isJson(data)) {
-        data = JSON.parse(data)
-        if (data['status'] === 200) {
-            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich hinzugefügt!</div>')
-            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-            let bezeichnung = $("#bezeichnung").val();
-            let anzahl = $("#anzahl").val();
-            let bild = $("#bild").val();
-            let datenblatt = $("#datenblatt").val();
+        $.each(data['data'], (key) => {
+            let device = data['data'][key];
+            let id = device[0];
+            let bezeichnung = device[1];
+            let anzahl = device[2];
+            let bild = device[3];
+            let datenblatt = device[4];
             let datenblatt_host;
             try {
                 datenblatt_host = new URL(datenblatt).host;
             } catch (TypeError) {
                 datenblatt_host = "";
             }
-            let library = $("#library").val();
+            let library = device[5];
             let library_host;
             try {
                 library_host = new URL(library).host;
             } catch (TypeError) {
                 library_host = "";
             }
-            $('#devices').append(generate_table_row(id, bezeichnung, anzahl, bild, datenblatt, datenblatt_host, library, library_host));
-            $('#devices_edit').append(generate_edit_view(id, bezeichnung, anzahl, bild, datenblatt, library));
 
-            $("#reset").trigger("click");
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
-        }
+            $("#devices").append(generate_table_row(id, bezeichnung, anzahl, bild, datenblatt, datenblatt_host, library, library_host));
+
+            $("#devices_edit").append(generate_edit_view(id, bezeichnung, anzahl, bild, datenblatt, library))
+        });
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
     } else {
-        if (data === "Unauthorized Access") {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
+}
+
+function delete_device_callback(data, status) {
+    if (status === 200) { // OK
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('success',data['message']))
+        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+        $("#card_" + id).remove();
+        $("#row_" + id).remove();
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
+}
+
+function update_device_callback(data, status) {
+    if (status === 200) { // OK
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('success',data['message']))
+        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+        if ($("#liste_before_" + id).val() !== $("#liste_" + id).val()) {
+            $("#card_" + id).remove();
+            $("#row_" + id).remove();
         } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
+            $("#card_" + id).find("input").each(function () {
+                $(this).attr('placeholder', $(this).val());
+            });
+
+            let bezeichnung = $("#bezeichnung_" + id).val();
+            let anzahl = $("#anzahl_" + id).val();
+            let bild = $("#bild_" + id).val();
+            let datenblatt = $("#datenblatt_" + id).val();
+            let datenblatt_host;
+            try {
+                datenblatt_host = new URL(datenblatt).host;
+            } catch (TypeError) {
+                datenblatt_host = "";
+            }
+            let library = $("#library_" + id).val();
+            let library_host;
+            try {
+                library_host = new URL(library).host;
+            } catch (TypeError) {
+                library_host = "";
+            }
+
+            $("#row_" + id).replaceWith(generate_table_row(id, bezeichnung, anzahl, bild, datenblatt, datenblatt_host, library, library_host));
         }
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
+}
+
+function add_device_callback(data, status) {
+    if (status === 200) { // OK
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('success',data['message']))
+        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+        let bezeichnung = $("#bezeichnung").val();
+        let anzahl = $("#anzahl").val();
+        let bild = $("#bild").val();
+        let datenblatt = $("#datenblatt").val();
+        let datenblatt_host;
+        try {
+            datenblatt_host = new URL(datenblatt).host;
+        } catch (TypeError) {
+            datenblatt_host = "";
+        }
+        let library = $("#library").val();
+        let library_host;
+        try {
+            library_host = new URL(library).host;
+        } catch (TypeError) {
+            library_host = "";
+        }
+        $('#devices').append(generate_table_row(id, bezeichnung, anzahl, bild, datenblatt, datenblatt_host, library, library_host));
+        $('#devices_edit').append(generate_edit_view(id, bezeichnung, anzahl, bild, datenblatt, library));
+
+        $("#reset").trigger("click");
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
     }
 }

@@ -1,6 +1,6 @@
 // Get lists
 $(function () {
-    httpGetAsync("/api/v1/resources/bought/", "", showBought);
+    httpGetAsync("/api/v1/resources/bought/", "", show_bought_callback);
 
     // Tabs
     let url = document.location.toString();
@@ -19,11 +19,11 @@ $(document).on('click', '#check_all', function () {
     $("#bought").children("tr").each(function () {
         this.firstChild.firstChild.checked = $("#check_all").prop("checked");
     })
-    calc();
+    calculate_price();
 });
 
 $(document).on('click', 'input[type="checkbox"]', function () {
-    calc();
+    calculate_price();
 });
 
 $(document).on('click', '#save', function () {
@@ -34,7 +34,7 @@ $(document).on('click', '#save', function () {
     data['anzahl'] = $("#anzahl").val();
     data['preis'] = $("#preis").val();
 
-    httpPostAsync("/api/v1/resources/bought/", data, add_result);
+    httpPostAsync("/api/v1/resources/bought/", data, add_result_callback);
 });
 
 $(document).on('click', '#reset', function () {
@@ -43,8 +43,8 @@ $(document).on('click', '#reset', function () {
     });
 });
 
-// Calculate price
-function calc() {
+
+function calculate_price() {
     let preis_einzeln = 0
     let preis_anzahl = 0
     $("#bought").children("tr").each(function () {
@@ -58,36 +58,6 @@ function calc() {
     });
     $("#preis_gesamt_eins").text(preis_einzeln.toFixed(2) + " €");
     $("#preis_gesamt_anzahl").text(preis_anzahl.toFixed(2) + " €");
-}
-
-
-function showBought(data) {
-    $("#bought").empty();
-
-    if (isJson(data)) {
-        data = JSON.parse(data);
-
-        $.each(data['data'], (key) => {
-            let wish = data['data'][key];
-            let id = wish[0];
-            let desc = wish[1];
-            let img = wish[2]
-            let anzahl = wish[3];
-            let preis = wish[4];
-            let link = wish[5];
-            let jahr = wish[6];
-            let host;
-            try {
-                host = new URL(link).host;
-            } catch (TypeError) {
-                host = "";
-            }
-
-            $("#bought").append(generate_table_row(id, preis, img, desc, host, anzahl, link, jahr));
-        });
-    } else {
-        $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich!</div>');
-    }
 }
 
 function generate_table_row(id, preis, img, desc, host, anzahl, link, jahr) {
@@ -107,36 +77,67 @@ function generate_table_row(id, preis, img, desc, host, anzahl, link, jahr) {
         "</tr>";
 }
 
-function add_result(data) {
-    console.log(data)
-    if (isJson(data)) {
+
+// Callbacks
+function show_bought_callback(data, status) {
+    if (status === 200) { // OK
         data = JSON.parse(data)
-        if (data['status'] === 200) {
-            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich hinzugefügt!</div>')
-            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-            let desc = $("#beschreibung").val();
-            let link = $("#link").val();
+        $("#bought").empty();
+        $.each(data['data'], (key) => {
+            let wish = data['data'][key];
+            let id = wish[0];
+            let desc = wish[1];
+            let img = wish[2]
+            let anzahl = wish[3];
+            let preis = wish[4];
+            let link = wish[5];
+            let jahr = wish[6];
             let host;
             try {
                 host = new URL(link).host;
             } catch (TypeError) {
                 host = "";
             }
-            let anzahl = $("#anzahl").val();
-            let img = $("#bild").val();
-            let preis = $("#preis").val();
-            let jahr = new Date().getFullYear();
-
-            $("#bought").append(generate_table_row(id, preis, img, desc, host, anzahl, jahr));
-            $("#reset").trigger("click");
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
-        }
+            $("#bought").append(generate_table_row(id, preis, img, desc, host, anzahl, link, jahr));
+        });
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
     } else {
-        if (data === "Unauthorized Access") {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
+}
+
+function add_result_callback(data, status) {
+    if (status === 200) { // OK
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('success',data['message']))
+        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+        let desc = $("#beschreibung").val();
+        let link = $("#link").val();
+        let host;
+        try {
+            host = new URL(link).host;
+        } catch (TypeError) {
+            host = "";
         }
+        let anzahl = $("#anzahl").val();
+        let img = $("#bild").val();
+        let preis = $("#preis").val();
+        let jahr = new Date().getFullYear();
+
+        $("#bought").append(generate_table_row(id, preis, img, desc, host, anzahl, jahr));
+        $("#reset").trigger("click");
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
     }
 }

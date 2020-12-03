@@ -2,14 +2,11 @@ function httpGetAsync(url, data, callback) {
     const xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
         if (this.readyState === 4) {
-            callback(xmlHttp.responseText);
+            callback(xmlHttp.responseText, xmlHttp.status);
         }
     }
 
-    xmlHttp.open("GET", url, true); // true for asynchronous
-    if (localStorage.getItem('token') !== null) {
-        xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(getCookie('token') + ":" + "1"));
-    }
+    xmlHttp.open("GET", url, true);
     xmlHttp.timeout = 5000;
     xmlHttp.send(null);
 }
@@ -18,14 +15,11 @@ function httpPostAsync(url, data, callback) {
     const xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
         if (this.readyState === 4) {
-            callback(xmlHttp.responseText);
+            callback(xmlHttp.responseText, xmlHttp.status);
         }
     }
 
-    xmlHttp.open("POST", url, true); // true for asynchronous
-    if (localStorage.getItem('token') !== null) {
-        xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(getCookie('token') + ":" + "1"));
-    }
+    xmlHttp.open("POST", url, true);
     xmlHttp.timeout = 5000;
     xmlHttp.setRequestHeader('Content-Type', 'application/json');
     xmlHttp.send(JSON.stringify(data));
@@ -35,14 +29,11 @@ function httpDeleteAsync(url, data, callback) {
     const xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
         if (this.readyState === 4) {
-            callback(xmlHttp.responseText);
+            callback(xmlHttp.responseText, xmlHttp.status);
         }
     }
 
-    xmlHttp.open("DELETE", url, true); // true for asynchronous
-    if (localStorage.getItem('token') !== null) {
-        xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(getCookie('token') + ":" + "1"));
-    }
+    xmlHttp.open("DELETE", url, true);
     xmlHttp.timeout = 5000;
     xmlHttp.send();
 }
@@ -51,14 +42,11 @@ function httpPutAsync(url, data, callback) {
     const xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
         if (this.readyState === 4) {
-            callback(xmlHttp.responseText);
+            callback(xmlHttp.responseText, xmlHttp.status);
         }
     }
 
-    xmlHttp.open("PUT", url, true); // true for asynchronous
-    if (localStorage.getItem('token') !== null) {
-        xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(getCookie('token') + ":" + "1"));
-    }
+    xmlHttp.open("PUT", url, true);
     xmlHttp.timeout = 5000;
     xmlHttp.setRequestHeader('Content-Type', 'application/json');
     xmlHttp.send(JSON.stringify(data));
@@ -116,31 +104,28 @@ String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
-
-function createCookie(name,value,minutes) {
-    let expires;
-    if (minutes) {
-        let date = new Date();
-        date.setTime(date.getTime()+(minutes*60*1000));
-        expires = "; expires="+date.toGMTString();
-    } else {
-        expires = "";
-    }
-    document.cookie = name+"="+value+expires+"; path=/";
+function createNotification(type, message) {
+    return  '<div class="alert alert-' + type + '" role="alert">' + message +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                    '<span aria-hidden="true">&times;</span>' +
+                '</button>' +
+            '</div>';
 }
 
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) === 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
+
+/*
+if (status === 200) { // OK
+    data = JSON.parse(data)
+    $("#notification_area").append(createNotification('success',data['message']))
+
+
+} else if (status === 401) { // Authentication required
+    data = JSON.parse(data)
+    $("#notification_area").append(createNotification('danger', data['message']));
+} else if (status === 422) { // Data missing in request
+    data = JSON.parse(data)
+    $("#notification_area").append(createNotification('danger', data['message']));
+} else {
+    $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
 }
+ */

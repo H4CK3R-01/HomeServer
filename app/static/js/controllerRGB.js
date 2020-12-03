@@ -49,7 +49,7 @@ function generateCircles(data) {
             ctx.drawImage(thumbImg, -100, -100, 200, 200);
         };
 
-        thumbImg.src = '../img/luefter.png';
+        thumbImg.src = 'static/img/luefter.png';
 
         canvas.addEventListener('click', function (e) {
             let xy = getMousePos(canvas, e);
@@ -64,7 +64,7 @@ function generateCircles(data) {
                     ctx.arc(Math.cos(18 * i * (Math.PI / 180)) * 170, Math.sin(18 * i * (Math.PI / 180)) * 170, 15, 0, Math.PI * 2, true);
                     ctx.closePath();
                     ctx.fill();
-                    httpPostAsync("/api/v1/resources/rgb/color", circles, changeColor)
+                    httpPostAsync("/api/v1/resources/rgb/color", circles, change_color_callback)
                 }
             }
         }, false);
@@ -84,24 +84,25 @@ function getMousePos(canvas, evt) {
     }
 }
 
-function changeColor(data) {
-    if (isJson(data)) {
-        if (data['status'] === 200) {
-            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich geändert!</div>');
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
-        }
-    } else {
-        if (data === "Unauthorized Access") {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich</div>');
-        }
-    }
-}
-
 function componentToHex(c) {
     c = parseInt(c)
     let hex = c.toString(16);
     return hex.length === 1 ? "0" + hex : hex;
+}
+
+
+// Callbacks
+function change_color_callback(data, status) {
+    if (status === 200) { // OK
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('success',data['message']))
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 423) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
 }

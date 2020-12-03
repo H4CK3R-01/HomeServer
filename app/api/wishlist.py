@@ -36,7 +36,7 @@ def wish_one_list(wish_list):
     cursor = db.cursor(prepared=True)
     cursor.execute('SELECT * FROM wunschliste WHERE liste = ? ORDER BY wichtigkeit', (wish_list, ))
     result = cursor.fetchall()
-    return jsonify({'status': 200, 'data': result})
+    return jsonify({'data': result})
 
 
 @wish.route('/<string:wish_list>', methods=['POST'])
@@ -51,25 +51,25 @@ def add_wish(wish_list):
     anzahl = data['anzahl']
 
     if beschreibung == "":
-        return jsonify({'status': 500, 'message': "Description missing"})
+        return jsonify({'message': "Description missing"}), 500
     if link == "":
-        return jsonify({'status': 500, 'message': "Link missing"})
+        return jsonify({'message': "Link missing"}), 500
     if bild == "":
-        return jsonify({'status': 500, 'message': "Image missing"})
+        return jsonify({'message': "Image missing"}), 500
     if preis == "":
-        return jsonify({'status': 500, 'message': "Price missing"})
+        return jsonify({'message': "Price missing"}), 500
     if anzahl == "":
-        return jsonify({'status': 500, 'message': "Number missing"})
+        return jsonify({'message': "Number missing"}), 500
 
     try:
         float(preis)
     except ValueError:
-        return jsonify({'status': 500, 'message': "Price is no number"})
+        return jsonify({'message': "Price is no number"}), 500
 
     try:
         int(anzahl)
     except ValueError:
-        return jsonify({'status': 500, 'message': "Number is no integer"})
+        return jsonify({'message': "Number is no integer"}), 500
 
     db = get_db()
     cursor = db.cursor(prepared=True)
@@ -81,9 +81,9 @@ def add_wish(wish_list):
                        'VALUES (?, ?, ?, ?, ?, ?)', (beschreibung, link, anzahl, bild, preis, wish_list))
         db.commit()
         wish_id = cursor.lastrowid
-        return jsonify({'status': 200, 'message': "Successfully added id=" + str(wish_id)})
+        return jsonify({'message': "Successfully added id=" + str(wish_id)})
     else:
-        return jsonify({'status': 500, 'message': "Already in list"})
+        return jsonify({'message': "Already in list"}), 500
 
 
 @wish.route('/<int:wish_id>', methods=['POST'])
@@ -98,34 +98,34 @@ def update_wish(wish_id):
     liste = data['liste']
 
     if beschreibung == "":
-        return jsonify({'status': 500, 'message': "Description missing"})
+        return jsonify({'message': "Description missing"}), 500
     if link == "":
-        return jsonify({'status': 500, 'message': "Link missing"})
+        return jsonify({'message': "Link missing"}), 500
     if bild == "":
-        return jsonify({'status': 500, 'message': "Image missing"})
+        return jsonify({'message': "Image missing"}), 500
     if preis == "":
-        return jsonify({'status': 500, 'message': "Price missing"})
+        return jsonify({'message': "Price missing"}), 500
     if anzahl == "":
-        return jsonify({'status': 500, 'message': "Number missing"})
+        return jsonify({'message': "Number missing"}), 500
     if liste == "":
-        return jsonify({'status': 500, 'message': "List missing"})
+        return jsonify({'message': "List missing"}), 500
 
     try:
         float(preis)
     except ValueError:
-        return jsonify({'status': 500, 'message': "Price is no number"})
+        return jsonify({'message': "Price is no number"}), 500
 
     try:
         int(anzahl)
     except ValueError:
-        return jsonify({'status': 500, 'message': "Number is no integer"})
+        return jsonify({'message': "Number is no integer"}), 500
 
     db = get_db()
     cursor = db.cursor(prepared=True)
     cursor.execute('UPDATE wunschliste SET beschreibung = ?, link = ?, anzahl = ?, bild = ?, preis = ?, liste = ?'
                    ' WHERE id = ?', (beschreibung, link, anzahl, bild, preis, liste, wish_id))
     db.commit()
-    return jsonify({'status': 200, 'message': "Successfully updated id=" + str(wish_id)})
+    return jsonify({'message': "Successfully updated id=" + str(wish_id)})
 
 
 @wish.route('/sort/', methods=['POST'])
@@ -134,7 +134,7 @@ def sort_wish():
     data = request.json
 
     if type(data) != list:
-        return jsonify({'status': 500, 'message': "No list provided"})
+        return jsonify({'message': "No list provided"}), 500
 
     db = get_db()
     cursor = db.cursor(prepared=True)
@@ -147,7 +147,7 @@ def sort_wish():
 
     db.commit()
 
-    return jsonify({'status': 200, 'message': "Successfully updated"})
+    return jsonify({'message': "Successfully updated"})
 
 
 @wish.route('/<int:wish_id>', methods=['DELETE'])
@@ -157,4 +157,4 @@ def delete_wish(wish_id):
     cursor = db.cursor(prepared=True)
     cursor.execute('DELETE FROM wunschliste WHERE id = ?', (wish_id,))
     db.commit()
-    return jsonify({'status': 200, 'message': "Successfully removed id=" + str(wish_id)})
+    return jsonify({'message': "Successfully removed id=" + str(wish_id)})

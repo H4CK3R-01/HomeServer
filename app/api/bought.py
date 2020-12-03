@@ -13,8 +13,8 @@ def bought_all():
     db = get_db()
     cursor = db.cursor(prepared=True)
     cursor.execute('SELECT * FROM gekauft')
-    result = cursor.fetchall()
-    return jsonify({'status': 200, 'data': result})
+    data = jsonify({'data': cursor.fetchall()})
+    return data
 
 
 @bought.route('/', methods=['POST'])
@@ -29,25 +29,25 @@ def add_bought():
     anzahl = data['anzahl']
 
     if beschreibung == "":
-        return jsonify({'status': 500, 'message': "Description missing"})
+        return jsonify({'message': "Description missing"}), 422
     if link == "":
-        return jsonify({'status': 500, 'message': "Link missing"})
+        return jsonify({'message': "Link missing"}), 422
     if bild == "":
-        return jsonify({'status': 500, 'message': "Image missing"})
+        return jsonify({'message': "Image missing"}), 422
     if preis == "":
-        return jsonify({'status': 500, 'message': "Price missing"})
+        return jsonify({'message': "Price missing"}), 422
     if anzahl == "":
-        return jsonify({'status': 500, 'message': "Number missing"})
+        return jsonify({'message': "Number missing"}), 422
 
     try:
         float(preis)
     except ValueError:
-        return jsonify({'status': 500, 'message': "Price is no number"})
+        return jsonify({'message': "Price is no number"}), 422
 
     try:
         int(anzahl)
     except ValueError:
-        return jsonify({'status': 500, 'message': "Number is no integer"})
+        return jsonify({'message': "Number is no integer"}), 422
 
     db = get_db()
     cursor = db.cursor(prepared=True)
@@ -60,6 +60,6 @@ def add_bought():
                        'VALUES (?, ?, ?, ?, ?, ?)', (beschreibung, link, anzahl, bild, preis, datum))
         bought_id = cursor.lastrowid
         db.commit()
-        return jsonify({'status': 200, 'message': "Successfully added id=" + str(bought_id)})
+        return jsonify({'message': "Successfully added id=" + str(bought_id)})
     else:
-        return jsonify({'status': 500, 'message': "Already in list"})
+        return jsonify({'message': "Already in list"}), 422

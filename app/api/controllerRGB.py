@@ -17,7 +17,7 @@ def get_color():
     cursor = db.cursor(prepared=True)
     cursor.execute('SELECT r, g, b, led_id FROM farben_luefter')
     result = cursor.fetchall()
-    return jsonify({'status': 200, 'data': result})
+    return jsonify({'data': result})
 
 
 @rgb.route('/color', methods=['POST'])
@@ -40,7 +40,7 @@ def set_color():
         cursor.execute('SELECT * FROM farben_luefter WHERE led_id = ?', (key,))
         result = cursor.fetchall()
         if len(result) == 0:
-            cursor.execute('UPDATE farben_luefter SET r = ?, g = ?, b = ? WHERE led_id = ?', (r, g, b, key))
+            cursor.execute('UPDATE farben_luefter SET r = ?, g = ?, b = ? WHERE led_id = ?', (r, g, b, key))  # TODO Doesn't work
         else:
             cursor.execute('INSERT INTO farben_luefter (r, g, b, led_id) VALUES (?, ?, ?, ?)', (r, g, b, key))
         db.commit()
@@ -54,8 +54,8 @@ def set_color():
         url = 'http://192.168.178.177'
         x = requests.post(url, data=json.dumps(colors))
         if x.status_code == 200:
-            return jsonify({'status': 200})
+            return jsonify({'message': 'Successfully changed colors'})
         else:
-            return jsonify({'status': 500})
+            return jsonify({'message': 'Could not change colors'}), 423
     else:
-        return jsonify({'status': 500, 'message': 'No connection to arduino'})
+        return jsonify({'message': 'No connection to arduino'}), 423

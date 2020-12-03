@@ -1,6 +1,6 @@
 // Get lists
 $(function () {
-    httpGetAsync('/api/v1/resources/wish/lists', "", loadLists);
+    httpGetAsync('/api/v1/resources/wish/lists', "", load_lists_callback);
 
     // Tabs
     let url = document.location.toString();
@@ -24,7 +24,7 @@ $(function () {
             $('#wish_edit li .card').each(function () {
                 sorted_array.push($(this).attr('id').substring(5));
             });
-            httpPostAsync('/api/v1/resources/wish/sort/', sorted_array, sort_callback)
+            httpPostAsync('/api/v1/resources/wish/sort/', sorted_array, sort_wish_callback)
         }
     }).disableSelection();
 });
@@ -36,18 +36,15 @@ $(document).on('shown.bs.tab', '.nav-tabs a', function (e) {
 
 // Select other list
 $(document).on('change', '#list', function () {
-    $("#wish").empty();
-    $("#wish_edit").empty();
-
-    $("#wish").append('<tr><td colspan=\"7\"><div class=\"d-flex justify-content-center\"><div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\">Loading...</span></div></div></td></tr>');
-    $("#wish_edit").append('<div class="card"><div class="card-body"><div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div></div></div>');
+    $("#wish").empty().append('<tr><td colspan=\"7\"><div class=\"d-flex justify-content-center\"><div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\">Loading...</span></div></div></td></tr>');
+    $("#wish_edit").empty().append('<div class="card"><div class="card-body"><div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div></div></div>');
 
     // Clear price and check-all button
     $('#check_all').prop('checked', false);
     $('#preis_gesamt_anzahl').text("");
     $('#preis_gesamt_eins').text("");
 
-    httpGetAsync('/api/v1/resources/wish/list/' + this.value, "", showWish);
+    httpGetAsync('/api/v1/resources/wish/list/' + this.value, "", show_wish_callback);
     setGetParameter("list", this.value);
 });
 
@@ -56,11 +53,11 @@ $(document).on('click', '#check_all', function () {
     $("#wish").children("tr").each(function () {
         this.firstChild.firstChild.checked = $("#check_all").prop("checked");
     })
-    calc();
+    calculate_price();
 });
 
 $(document).on('click', 'input[type="checkbox"]', function () {
-    calc();
+    calculate_price();
 });
 
 $(document).on('click', '#save', function () {
@@ -71,7 +68,7 @@ $(document).on('click', '#save', function () {
     data['anzahl'] = $("#anzahl").val();
     data['preis'] = $("#preis").val();
 
-    httpPostAsync("/api/v1/resources/wish/" + $('#list').val(), data, add_result);
+    httpPostAsync("/api/v1/resources/wish/" + $('#list').val(), data, add_wish_callback);
 });
 
 $(document).on('click', '#reset', function () {
@@ -89,7 +86,7 @@ $(document).on('click', '.save', function () {
     data['anzahl'] = $("#anzahl_" + id).val();
     data['preis'] = $("#preis_" + id).val();
     data['liste'] = $("#liste_" + id).val();
-    httpPostAsync("/api/v1/resources/wish/" + id, data, update_result);
+    httpPostAsync("/api/v1/resources/wish/" + id, data, update_wish_callback);
 });
 
 // Reset input
@@ -103,7 +100,7 @@ $(document).on('click', '.reset', function () {
 // Delete wish
 $(document).on('click', '.delete', function () {
     let id = this.id.substring(7);
-    httpDeleteAsync("/api/v1/resources/wish/" + id, "", delete_result);
+    httpDeleteAsync("/api/v1/resources/wish/" + id, "", delete_wish_callback);
 });
 
 
@@ -124,8 +121,8 @@ $(document).on('click', '#add_list_save', function () {
     $("#add_list").modal('hide');
 });
 
-// Calculate price
-function calc() {
+
+function calculate_price() {
     let preis_einzeln = 0
     let preis_anzahl = 0
     $("#wish").children("tr").each(function () {
@@ -139,67 +136,6 @@ function calc() {
     });
     $("#preis_gesamt_eins").text(preis_einzeln.toFixed(2) + " €");
     $("#preis_gesamt_anzahl").text(preis_anzahl.toFixed(2) + " €");
-}
-
-
-function loadLists(data) {
-    if (isJson(data)) {
-        const lists = JSON.parse(data);
-        const $select = $('#list');
-        $.each(lists['data'], function (key) {
-            $select.append('<option value="' + key + '">' + lists['data'][key] + '</option>');
-        });
-
-        let get = findGetParameter("list");
-        if (get == null) {
-            $select.val("wunschliste");
-        } else {
-            if (selectHasValue("list", get)) $select.val(get);
-            else $select.val("wunschliste");
-        }
-
-        httpGetAsync('/api/v1/resources/wish/list/' + $select.val(), "", showWish);
-    } else {
-        $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich!</div>');
-    }
-}
-
-
-function showWish(data) {
-    $("#wish").empty();
-    $("#wish_edit").empty();
-
-    if (isJson(data)) {
-        data = JSON.parse(data);
-        $.each(data['data'], (key) => {
-            let wish = data['data'][key];
-            let id = wish[0];
-            let desc = wish[1];
-            let link = wish[2];
-            let host;
-            try {
-                host = new URL(link).host;
-            } catch (TypeError) {
-                host = "";
-            }
-            let anzahl = wish[4];
-            let img = wish[5];
-            let preis = wish[6];
-            let wichtigkeit = wish[7];
-            let liste = wish[8];
-
-            $("#wish").append(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link));
-            $("#wish_edit").append(generate_edit_view(id, desc, img, link, anzahl, preis, liste))
-
-            $('#list > option').each(function () {
-                $("#liste_" + id).append('<option value="' + this.value + '">' + this.text + '</option>');
-            });
-            $("#liste_" + id).append('<option value="new" class="new">Add new list</option>');
-            $("#liste_" + id).val(liste);
-        });
-    } else {
-        $("#notification_area").append('<div class="alert alert-danger" role="alert">Laden der Daten nicht möglich!</div>');
-    }
 }
 
 function generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link) {
@@ -253,122 +189,184 @@ function generate_edit_view(id, desc, img, link, anzahl, preis, liste) {
 }
 
 
-function sort_callback(data) {
-    data = JSON.parse(data)
-    if (data['status'] === 200) {
-        $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich gespeichert!</div>')
-
-        //$("#wish").empty().append('<tr><td colspan=\"7\"><div class=\"d-flex justify-content-center\"><div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\">Loading...</span></div></div></td></tr>');
-        //httpGetAsync('/api/v1/resources/wish/list/' + this.value, "", showWish);  // TODO Sort table without reload
-    } else {
-        if (data === "Unauthorized Access") {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
-        }
-    }
-}
-
-
-function delete_result(data) {
-    if (isJson(data)) {
-        data = JSON.parse(data)
-        if (data['status'] === 200) {
-            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich gelöscht!</div>')
-            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-            $("#card_" + id).remove();
-            $("#row_" + id).remove();
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
-        }
-    } else {
-        if (data === "Unauthorized Access") {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
-        }
-    }
-}
-
-function update_result(data) {
-    if (isJson(data)) {
-        data = JSON.parse(data)
-        if (data['status'] === 200) {
-            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich geändert!</div>');
-            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-            if ($("#liste_before_" + id).val() !== $("#liste_" + id).val()) {
-                $("#card_" + id).remove();
-                $("#row_" + id).remove();
-            } else {
-                $("#card_" + id).find("input").each(function () {
-                    $(this).attr('placeholder', $(this).val());
-                });
-
-                let desc = $("#beschreibung_" + id).val();
-                let link = $("#link_" + id).val();
-                let host;
-                try {
-                    host = new URL(link).host;
-                } catch (TypeError) {
-                    host = "";
-                }
-                let anzahl = $("#anzahl_" + id).val();
-                let img = $("#bild_" + id).val();
-                let preis = $("#preis_" + id).val();
-                let wichtigkeit = 0
-
-                $("#row_" + id).replaceWith(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link));
-            }
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
-        }
-    } else {
-        if (data === "Unauthorized Access") {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
-        }
-    }
-}
-
-
-function add_result(data) {
-    if (isJson(data)) {
-        data = JSON.parse(data)
-        if (data['status'] === 200) {
-            $("#notification_area").append('<div class="alert alert-success" role="alert">Erfolgreich hinzugefügt!</div>')
-            let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
-            let desc = $("#beschreibung").val();
-            let link = $("#link").val();
+// Callbacks
+function show_wish_callback(data, status) {
+    if (status === 200) { // OK
+        $("#wish").empty();
+        $("#wish_edit").empty();
+        data = JSON.parse(data);
+        $.each(data['data'], (key) => {
+            let wish = data['data'][key];
+            let id = wish[0];
+            let desc = wish[1];
+            let link = wish[2];
             let host;
             try {
                 host = new URL(link).host;
             } catch (TypeError) {
                 host = "";
             }
-            let anzahl = $("#anzahl").val();
-            let img = $("#bild").val();
-            let preis = $("#preis").val();
-            let wichtigkeit = 0
-            let liste = $("#list").val();
+            let anzahl = wish[4];
+            let img = wish[5];
+            let preis = wish[6];
+            let wichtigkeit = wish[7];
+            let liste = wish[8];
 
-            $(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl)).insertBefore('table > tbody > tr:first');
-            $(generate_edit_view(id, desc, img, link, anzahl, preis, liste)).insertBefore('#wish_edit > .card:first');
+            $("#wish").append(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link));
+            $("#wish_edit").append(generate_edit_view(id, desc, img, link, anzahl, preis, liste))
+
             $('#list > option').each(function () {
                 $("#liste_" + id).append('<option value="' + this.value + '">' + this.text + '</option>');
             });
-            $("#liste_" + id).append('<option value="new" class="new">Add new list</option>');
-            $("#liste_" + id).val(liste);
-
-            $("#reset").trigger("click");
-        } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data['message'] + '</div>');
-        }
+            $("#liste_" + id).append('<option value="new" class="new">Add new list</option>').val(liste);
+        });
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
     } else {
-        if (data === "Unauthorized Access") {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">Bitte zuerst anmelden!</div>')
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
+}
+
+function load_lists_callback(data, status) {
+    if (status === 200) { // OK
+        const lists = JSON.parse(data);
+        const $select = $('#list');
+        $.each(lists['data'], function (key) {
+            $select.append('<option value="' + key + '">' + lists['data'][key] + '</option>');
+        });
+
+        let get = findGetParameter("list");
+        if (get == null) {
+            $select.val("wunschliste");
         } else {
-            $("#notification_area").append('<div class="alert alert-danger" role="alert">' + data + '</div>');
+            if (selectHasValue("list", get)) $select.val(get);
+            else $select.val("wunschliste");
         }
+
+        httpGetAsync('/api/v1/resources/wish/list/' + $select.val(), "", show_wish_callback);
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
+}
+
+function sort_wish_callback(data, status) {
+    if (status === 200) { // OK
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('success',data['message']))
+        // TODO Sort table without reload
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
+}
+
+function delete_wish_callback(data, status) {
+    if (status === 200) { // OK
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('success',data['message']))
+        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+        $("#card_" + id).remove();
+        $("#row_" + id).remove();
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
+}
+
+function update_wish_callback(data, status) {
+    if (status === 200) { // OK
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('success',data['message']))
+        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+        if ($("#liste_before_" + id).val() !== $("#liste_" + id).val()) {
+            $("#card_" + id).remove();
+            $("#row_" + id).remove();
+        } else {
+            $("#card_" + id).find("input").each(function () {
+                $(this).attr('placeholder', $(this).val());
+            });
+
+            let desc = $("#beschreibung_" + id).val();
+            let link = $("#link_" + id).val();
+            let host;
+            try {
+                host = new URL(link).host;
+            } catch (TypeError) {
+                host = "";
+            }
+            let anzahl = $("#anzahl_" + id).val();
+            let img = $("#bild_" + id).val();
+            let preis = $("#preis_" + id).val();
+            let wichtigkeit = 0
+
+            $("#row_" + id).replaceWith(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl, link));
+        }
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
+}
+
+function add_wish_callback(data, status) {
+    if (status === 200) { // OK
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('success',data['message']))
+        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+        let desc = $("#beschreibung").val();
+        let link = $("#link").val();
+        let host;
+        try {
+            host = new URL(link).host;
+        } catch (TypeError) {
+            host = "";
+        }
+        let anzahl = $("#anzahl").val();
+        let img = $("#bild").val();
+        let preis = $("#preis").val();
+        let wichtigkeit = 0
+        let liste = $("#list").val();
+
+        $(generate_table_row(id, preis, wichtigkeit, img, desc, host, anzahl)).insertBefore('table > tbody > tr:first');
+        $(generate_edit_view(id, desc, img, link, anzahl, preis, liste)).insertBefore('#wish_edit > .card:first');
+        $('#list > option').each(function () {
+            $("#liste_" + id).append('<option value="' + this.value + '">' + this.text + '</option>');
+        });
+        $("#liste_" + id).append('<option value="new" class="new">Add new list</option>').val(liste);
+
+        $("#reset").trigger("click");
+
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
     }
 }

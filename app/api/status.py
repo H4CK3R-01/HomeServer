@@ -84,7 +84,7 @@ def all_services():
         'website': json.loads(website()),
         'api': json.loads(api())
     }
-    return jsonify({'status': 200, 'data': data})
+    return jsonify({'data': data})
 
 
 def check_port(host, port, name):
