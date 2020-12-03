@@ -20,7 +20,7 @@ function httpPostAsync(url, data, callback) {
     }
 
     xmlHttp.open("POST", url, true);
-    xmlHttp.timeout = 5000;
+    xmlHttp.timeout = 15000;
     xmlHttp.setRequestHeader('Content-Type', 'application/json');
     xmlHttp.send(JSON.stringify(data));
 }
@@ -111,21 +111,3 @@ function createNotification(type, message) {
                 '</button>' +
             '</div>';
 }
-
-
-/*
-if (status === 200) { // OK
-    data = JSON.parse(data)
-    $("#notification_area").append(createNotification('success',data['message']))
-
-
-} else if (status === 401) { // Authentication required
-    data = JSON.parse(data)
-    $("#notification_area").append(createNotification('danger', data['message']));
-} else if (status === 422) { // Data missing in request
-    data = JSON.parse(data)
-    $("#notification_area").append(createNotification('danger', data['message']));
-} else {
-    $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
-}
- */

@@ -49,9 +49,10 @@ def set_color():
         colors.append(int(hex_color, 16))
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    result = sock.connect_ex(("192.168.178.177", 80))
+    result = sock.connect_ex(("192.168.178.31", 80))
+    print(json.dumps(colors))
     if result == 0:
-        url = 'http://192.168.178.177'
+        url = 'http://192.168.178.31/color'
         x = requests.post(url, data=json.dumps(colors))
         if x.status_code == 200:
             return jsonify({'message': 'Successfully changed colors'})

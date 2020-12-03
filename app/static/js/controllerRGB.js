@@ -6,6 +6,7 @@ function Circle(x, y, r, color) {
 }
 
 let colorPicker;
+let circles = {};
 $(function () {
     colorPicker = new iro.ColorPicker('#picker', {
         width: 400
@@ -22,6 +23,9 @@ $(function () {
     httpGetAsync("/api/v1/resources/rgb/color", "", generateCircles);
 });
 
+$('.save').on('click', function () {
+    httpPostAsync('/api/v1/resources/rgb/color', circles, change_color_callback)
+})
 
 
 function generateCircles(data) {
@@ -36,7 +40,6 @@ function generateCircles(data) {
             ctx.translate(canvas.width / 2, canvas.height / 2);
             ctx.lineWidth = 2
 
-            let circles = {}
             for (let i = l * 20; i < l * 20 + 20; i++) {
                 let r = componentToHex(data.data[i][0]);
                 let g = componentToHex(data.data[i][1]);
@@ -80,7 +83,6 @@ function generateCircles(data) {
                         ctx.arc(Math.cos(18 * i * (Math.PI / 180)) * 170, Math.sin(18 * i * (Math.PI / 180)) * 170, 15, 0, Math.PI * 2, true);
                         ctx.closePath();
                         ctx.fill();
-                        httpPostAsync("/api/v1/resources/rgb/color", circles, change_color_callback)
                     }
                 }
             }, false);
