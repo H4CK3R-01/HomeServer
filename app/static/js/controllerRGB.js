@@ -64,14 +64,14 @@ function generate_circles_callback(data, status) {
             if(l === 0) $('#luefter' + l + '_nav_tab').addClass('active');
 
             $('#tab-content').append(
-                '<div class="tab-pane" id="luefter' + l + '_tab" role="tabpanel">' +
+                '<div class="tab-pane" style="width: 100%; text-align:center;" id="luefter' + l + '_tab" role="tabpanel">' +
                     '<canvas id="luefter' + l + '"></canvas>' +
                     '<div class="row" style="margin-bottom: 8px">' +
                         '<div class="col-6"><button class="turn-left form-control btn btn-warning" type="button"><-</button></div>' +
                         '<div class="col-6 text-right"><button class="turn-right form-control btn btn-warning" type="button">-></button></div>' +
                     '</div>' +
-                    '<button class="rainbow form-control btn btn-success btn-block" type="button">Regenbogenfarben</button>' +
-                    '<button class="all form-control btn btn-secondary btn-block" type="button">Alle LEDs in dieser Farbe</button>' +
+                    '<button class="rainbow form-control btn btn-success btn-block" type="button">Regenbogen</button>' +
+                    '<button class="all form-control btn btn-secondary btn-block" type="button">Alle LEDs in der gleichen Farbe</button>' +
                     '<button class="save form-control btn btn-primary btn-block" type="button">Speichern</button>' +
                 '</div>'
             );
