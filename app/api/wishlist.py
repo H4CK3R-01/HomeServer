@@ -1,3 +1,4 @@
+import datetime
 import json
 import os
 
@@ -34,7 +35,7 @@ def wish_lists():
 def wish_one_list(wish_list):
     db = get_db()
     cursor = db.cursor(prepared=True)
-    cursor.execute('SELECT * FROM wunschliste WHERE liste = ? ORDER BY wichtigkeit', (wish_list, ))
+    cursor.execute('SELECT * FROM wunschliste WHERE liste = ? ORDER BY wichtigkeit', (wish_list,))
     result = cursor.fetchall()
     return jsonify({'data': result})
 
@@ -126,6 +127,31 @@ def update_wish(wish_id):
                    ' WHERE id = ?', (beschreibung, link, anzahl, bild, preis, liste, wish_id))
     db.commit()
     return jsonify({'message': "Successfully updated id=" + str(wish_id)})
+
+
+@wish.route('/bought/<int:wish_id>', methods=['POST'])
+@login_required
+def move_wish_to_bought(wish_id):
+    db = get_db()
+    cursor = db.cursor(prepared=True)
+    cursor.execute('SELECT * FROM wunschliste WHERE id = ?', (wish_id,))
+    result = cursor.fetchall()
+    print(result[0])
+
+    beschreibung = result[0][1]
+    link = result[0][2]
+    bild = result[0][5]
+    preis = result[0][6]
+    anzahl = result[0][4]
+
+    db = get_db()
+    cursor = db.cursor(prepared=True)
+    cursor.execute('INSERT INTO gekauft (beschreibung, link, anzahl, bild, preis, jahr) VALUES (?, ?, ?, ?, ?, ?)',
+                   (beschreibung, link, anzahl, bild, preis, datetime.datetime.now().year))
+
+    cursor.execute('DELETE FROM wunschliste WHERE id = ?', (wish_id, ))
+    db.commit()
+    return jsonify({'message': "Successfully moved id=" + str(wish_id)})
 
 
 @wish.route('/sort/', methods=['POST'])

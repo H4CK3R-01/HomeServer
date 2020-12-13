@@ -89,6 +89,11 @@ $(document).on('click', '.save', function () {
     httpPostAsync("/api/v1/resources/wish/" + id, data, update_wish_callback);
 });
 
+$(document).on('click', '.bought', function () {
+    let id = this.id.substring(7);
+    httpPostAsync("/api/v1/resources/wish/bought/" + id, "", move_wish_to_bougth_callback);
+});
+
 // Reset input
 $(document).on('click', '.reset', function () {
     let id = this.id.substring(6);
@@ -183,6 +188,7 @@ function generate_edit_view(id, desc, img, link, anzahl, preis, liste) {
         '<button class="btn btn-primary save" id="save_' + id + '">Speichern</button>' +
         '<button class="btn btn-secondary reset" id="reset_' + id + '">Zurücksetzen</button>' +
         '<button class="btn btn-danger delete" id="delete_' + id + '">Löschen</button>' +
+        '<button class="btn btn-success bought" id="bought_' + id + '">Gekauft</button>' +
         '</div>' +
         '</div>' +
         '</div></li>'
@@ -264,6 +270,24 @@ function sort_wish_callback(data, status) {
         data = JSON.parse(data)
         $("#notification_area").append(createNotification('success',data['message']))
         // TODO Sort table without reload
+    } else if (status === 401) { // Authentication required
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else if (status === 422) { // Data missing in request
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('danger', data['message']));
+    } else {
+        $("#notification_area").append(createNotification('danger', "Unbekannter Fehler"));
+    }
+}
+
+function move_wish_to_bougth_callback(data, status) {
+    if (status === 200) { // OK
+        data = JSON.parse(data)
+        $("#notification_area").append(createNotification('success',data['message']))
+        let id = data['message'].match(/id=(?<id>\d*)/gm)[0].substring(3);
+        $("#card_" + id).remove();
+        $("#row_" + id).remove();
     } else if (status === 401) { // Authentication required
         data = JSON.parse(data)
         $("#notification_area").append(createNotification('danger', data['message']));
